@@ -11,3 +11,11 @@ CREATE TABLE IF NOT EXISTS "period_data"(
     "user_id" INT NOT NULL,
     FOREIGN KEY ("user_id") REFERENCES "user_data"("id") ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS "default_settings"(
+    "id" SERIAL PRIMARY KEY,
+    "user_id" INT NOT NULL,
+    "plus_minus" INT NOT NULL,
+    "cycle_length" INT NOT NULL,
+    FOREIGN KEY ("user_id") REFERENCES "user_data"("id") ON DELETE CASCADE
+);

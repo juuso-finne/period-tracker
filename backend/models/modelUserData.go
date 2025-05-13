@@ -23,3 +23,18 @@ func AddUserData(db *sql.DB, data *types.LoginData) error{
 
 	return nil
 }
+
+func GetUserData(db *sql.DB, username string) (*types.CompleteUserData, error){
+	query := `
+		SELECT id, username, password, session_token, csrf_token
+		FROM user_data
+		WHERE username = $1
+	`
+	var d types.CompleteUserData
+	err := db.QueryRow(query, username).Scan(&d.Id, &d.Username, &d.Password, &d.Session, &d.Csrf)
+	if err != nil{
+		return nil, err
+	}
+
+	return &d, nil
+}

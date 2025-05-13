@@ -10,3 +10,11 @@ type LoginData struct{
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+type CompleteUserData struct{
+	Id string `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Session any `json:"session"`
+	Csrf any `json:"csrf"`
+}

@@ -40,7 +40,7 @@ func main(){
 		Db: db,
 	}
 
-	mux.HandleFunc("GET /data", h.GetPeriodData)
+	routeHandlers.AddDataRoutes(mux, &h)
 
 
 	fmt.Printf("API listening on port %s\n", port)

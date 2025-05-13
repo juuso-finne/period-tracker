@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"fmt"
+	"backend/routeHandlers"
 )
 
 func main(){
@@ -15,8 +16,31 @@ func main(){
 
 	port := os.Getenv("PORT")
 
+	db, err := connectToDB()
+	if err != nil{
+		log.Fatalf("Error connecting to database: %v", err)
+	}
+
+	err = db.Ping()
+	if err != nil{
+		log.Fatalf("Error pinging database: %v", err)
+	} else {
+		fmt.Println("Connected to DB")
+	}
+
+
+
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /health", health)
+	mux.HandleFunc("GET /health", func (w http.ResponseWriter, r *http.Request){
+		w.WriteHeader((http.StatusOK))
+		w.Write([]byte("OK"))
+	})
+
+	h := routeHandlers.DataHandler{
+		Db: db,
+	}
+
+	mux.HandleFunc("GET /data", h.GetPeriodData)
 
 
 	fmt.Printf("API listening on port %s\n", port)

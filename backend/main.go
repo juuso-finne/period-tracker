@@ -32,7 +32,7 @@ func main(){
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", func (w http.ResponseWriter, r *http.Request){
-		w.WriteHeader((http.StatusOK))
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
 
@@ -41,6 +41,7 @@ func main(){
 	}
 
 	routeHandlers.AddDataRoutes(mux, &h)
+	routeHandlers.AddUserRoutes(mux, &h)
 
 
 	fmt.Printf("API listening on port %s\n", port)

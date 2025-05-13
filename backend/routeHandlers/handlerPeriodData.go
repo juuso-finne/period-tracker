@@ -17,8 +17,8 @@ func AddDataRoutes(mux *http.ServeMux, h *DataHandler){
 
 func (h *DataHandler) GetPeriodData(w http.ResponseWriter, r *http.Request){
 	uid := r.Header.Get("uid")
-	data, err := models.GetPeriodData(h.Db, uid)
 
+	data, err := models.GetPeriodData(h.Db, uid)
 	if err != nil{
 		log.Println(err.Error())
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

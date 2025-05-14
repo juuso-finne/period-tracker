@@ -13,13 +13,13 @@ import (
 
 func AddUserRoutes(mux *http.ServeMux, h *DataHandler){
 	dataRouter := http.NewServeMux()
-	dataRouter.HandleFunc("POST /register", h.Register)
-	dataRouter.HandleFunc(("POST /login"), h.Login)
+	dataRouter.HandleFunc("POST /register", h.register)
+	dataRouter.HandleFunc(("POST /login"), h.login)
 
 	mux.Handle("/users/", http.StripPrefix("/users", dataRouter))
 }
 
-func (h *DataHandler) Register (w http.ResponseWriter, r *http.Request){
+func (h *DataHandler) register (w http.ResponseWriter, r *http.Request){
 	var d types.LoginData
 	err := json.NewDecoder(r.Body).Decode(&d)
 	if err != nil{
@@ -38,7 +38,7 @@ func (h *DataHandler) Register (w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (h *DataHandler) Login (w http.ResponseWriter, r *http.Request){
+func (h *DataHandler) login (w http.ResponseWriter, r *http.Request){
 	var d types.LoginData
 	err := json.NewDecoder(r.Body).Decode(&d)
 	if err != nil{

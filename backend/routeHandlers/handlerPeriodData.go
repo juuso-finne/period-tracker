@@ -9,13 +9,13 @@ import (
 
 func AddDataRoutes(mux *http.ServeMux, h *DataHandler){
 	dataRouter := http.NewServeMux()
-	dataRouter.HandleFunc("GET /", h.GetPeriodData)
+	dataRouter.HandleFunc("GET /", h.getPeriodData)
 
 	mux.Handle("/data/", http.StripPrefix("/data", dataRouter))
 }
 
 
-func (h *DataHandler) GetPeriodData(w http.ResponseWriter, r *http.Request){
+func (h *DataHandler) getPeriodData(w http.ResponseWriter, r *http.Request){
 	uid := r.Header.Get("uid")
 
 	data, err := models.GetPeriodData(h.Db, uid)

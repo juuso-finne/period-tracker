@@ -38,3 +38,27 @@ func GetUserData(db *sql.DB, username string) (*types.CompleteUserData, error){
 
 	return &d, nil
 }
+
+func SaveTokens(db *sql.DB, session string, csrf string, uid string) error{
+	query := `
+		UPDATE user_data
+		SET session_token = $1, csrf_token = $2
+		WHERE id = $3
+	`
+
+	_, err := db.Exec(query, session, csrf, uid)
+
+	return err
+}
+
+func ClearTokens(db *sql.DB, uid string) error{
+	query := `
+		UPDATE user_data
+		SET session_token = NULL, csrf_token = NULL
+		WHERE id = $1
+	`
+
+	_, err := db.Exec(query, uid)
+
+	return err
+}

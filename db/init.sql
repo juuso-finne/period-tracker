@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS "user_data" (
     "id" UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     "username" VARCHAR(255) UNIQUE NOT NULL,
     "password" TEXT NOT NULL,
-    "session_token" VARCHAR(32),
-    "csrf_token" VARCHAR(32)
+    "session_token" VARCHAR(44),
+    "csrf_token" VARCHAR(44)
 );
 
 CREATE TABLE IF NOT EXISTS "period_data"(

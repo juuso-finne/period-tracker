@@ -3,6 +3,7 @@ package routeHandlers
 import (
 	"backend/models"
 	"backend/types"
+	"backend/utils"
 	"database/sql"
 	"encoding/json"
 	"log"
@@ -62,6 +63,24 @@ func (h *DataHandler) login (w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	sessionToken := utils.GenerateToken(32)
+	csrfToken := utils.GenerateToken(32)
+
+	err = models.SaveTokens(h.Db, sessionToken, csrfToken, user.Id)
+	if err != nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	err = utils.SetCookies(w, sessionToken, csrfToken)
+	if err != nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
 
 	w.WriteHeader(http.StatusOK)
 }

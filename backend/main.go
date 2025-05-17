@@ -14,7 +14,10 @@ func main(){
 		log.Fatalf("Error loading .env file")
 	}
 
-	port := os.Getenv("PORT")
+	port, exists := os.LookupEnv("PORT")
+	if !exists{
+		port = ":5000"
+	}
 
 	db, err := connectToDB()
 	if err != nil{

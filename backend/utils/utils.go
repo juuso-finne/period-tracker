@@ -31,6 +31,7 @@ func SetCookies(w http.ResponseWriter, session string, csrf string) error {
 		Value: session,
 		Expires: time.Now().Add(d),
 		HttpOnly: true,
+		Path: "/",
 	})
 
 		http.SetCookie(w, &http.Cookie{
@@ -38,6 +39,7 @@ func SetCookies(w http.ResponseWriter, session string, csrf string) error {
 		Value: csrf,
 		Expires: time.Now().Add(d),
 		HttpOnly: false,
+		Path: "/",
 	})
 
 	return nil

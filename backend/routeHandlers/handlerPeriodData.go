@@ -1,6 +1,7 @@
 package routeHandlers
 
 import (
+	"backend/middleware"
 	"backend/models"
 	"encoding/json"
 	"net/http"
@@ -8,10 +9,19 @@ import (
 )
 
 func AddDataRoutes(mux *http.ServeMux, h *DataHandler){
+
+	mwh := middleware.MiddlewareHandler{
+		Db: h.Db,
+	}
+
+	middlewareStack := middleware.CreateStack(&mwh, middleware.Authenticate)
+
 	dataRouter := http.NewServeMux()
 	dataRouter.HandleFunc("GET /", h.getPeriodData)
 
-	mux.Handle("/data/", http.StripPrefix("/data", dataRouter))
+	wrappedRouter := middlewareStack(dataRouter, &mwh)
+
+	mux.Handle("/data/", http.StripPrefix("/data", wrappedRouter))
 }
 
 

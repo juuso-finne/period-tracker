@@ -34,3 +34,45 @@ func GetPeriodData(db *sql.DB, uid string) ([]types.PeriodData, error){
 
     return periods, nil
 }
+
+func PostPeriodData(db *sql.DB, data *types.PeriodData, uid string) error{
+    query := `
+        INSERT INTO period_data (user_id, start, "end")
+        VALUES ($1, $2, $3)
+    `
+    _, err := db.Exec(query, uid, data.Start, data.End)
+    return err
+}
+
+func EditPeriodData(db *sql.DB, data *types.PeriodData) error{
+    query := `
+        UPDATE period_data
+        SET start = $1, "end" = $2
+        WHERE id = $3
+    `
+    _, err := db.Exec(query, data.Start, data.End, data.Id)
+    return err
+}
+
+func DeletePeriodData(db *sql.DB, id int) error{
+    query := `
+        DELETE FROM period_data
+        WHERE id = $1
+    `
+    _, err := db.Exec(query, id)
+    return err
+}
+
+func GetDataOwner(db *sql.DB, id int) (*string, error){
+    query := `
+        SELECT user_id
+        FROM period_data
+        WHERE id = $1
+    `
+    var owner string
+    err := db.QueryRow(query, id).Scan(&owner)
+    if err != nil {
+        return nil, err
+    }
+    return &owner, nil
+}

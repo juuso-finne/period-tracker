@@ -16,7 +16,7 @@ func AddDataRoutes(mux *http.ServeMux, h *DataHandler){
 	}
 
 	authentication := middleware.CreateStack(&mwh, middleware.Authenticate)
-	authorization := middleware.CreateStack(&mwh, authentication, middleware.Authorize)
+	authorization := middleware.CreateStack(&mwh, authentication, middleware.Authorize(h.getPeriodDataOwner))
 
 	dataRouter := http.NewServeMux()
 	dataRouter.HandleFunc("GET /", h.getPeriodData)
@@ -99,7 +99,6 @@ func (h *DataHandler) deletePeriodData(w http.ResponseWriter, r *http.Request){
 	err := json.NewDecoder(r.Body).Decode(&d)
 
 	if err != nil{
-		log.Println(err.Error())
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
@@ -110,4 +109,13 @@ func (h *DataHandler) deletePeriodData(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *DataHandler) getPeriodDataOwner (resourceId int) (string, error){
+	owner, err := models.GetPeriodDataOwner(h.Db, resourceId)
+	if err != nil{
+		log.Println(err.Error())
+		return "", err
+	}
+	return *owner, nil
 }

@@ -18,3 +18,5 @@ type CompleteUserData struct{
 	Session any `json:"session"`
 	Csrf any `json:"csrf"`
 }
+
+type ResourceOwnerIdExtractor func (resourceId int) (string, error)

@@ -63,7 +63,7 @@ func DeletePeriodData(db *sql.DB, id int) error{
     return err
 }
 
-func GetDataOwner(db *sql.DB, id int) (*string, error){
+func GetPeriodDataOwner(db *sql.DB, id int) (*string, error){
     query := `
         SELECT user_id
         FROM period_data

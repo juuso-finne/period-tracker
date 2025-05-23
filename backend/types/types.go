@@ -21,7 +21,7 @@ type CompleteUserData struct{
 }
 
 type SettingsData struct{
-	PlusMinus int `json:"plusminus"`
+	PlusMinus int `json:"plusMinus"`
 	CycleLength int `json:"cycleLength"`
 
 }

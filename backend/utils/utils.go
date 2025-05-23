@@ -1,8 +1,11 @@
 package utils
 
 import (
+	"backend/models"
 	"crypto/rand"
+	"database/sql"
 	"encoding/base64"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -16,7 +19,7 @@ func GenerateToken(length int) string {
 	return base64.URLEncoding.EncodeToString(bytes)
 }
 
-func SetCookies(w http.ResponseWriter, session string, csrf string, username string) error {
+func setCookies(w http.ResponseWriter, session string, csrf string, username string) error {
 	exp, exists := os.LookupEnv("TOKEN_EXPIRATION")
 
 		if !exists{
@@ -55,7 +58,7 @@ func SetCookies(w http.ResponseWriter, session string, csrf string, username str
 	return nil
 }
 
-func VerifyTokens (session string, csrf string, sessionHash string, csrfHash string) (bool){
+func VerifyTokens(session string, csrf string, sessionHash string, csrfHash string) bool{
 	sessionMatch := false
 	csrfMatch := false
 
@@ -68,4 +71,23 @@ func VerifyTokens (session string, csrf string, sessionHash string, csrfHash str
 	}
 
 	return sessionMatch && csrfMatch
+}
+
+func UserLogin(w http.ResponseWriter, username string, db *sql.DB, uid string){
+	sessionToken := GenerateToken(32)
+	csrfToken := GenerateToken(32)
+
+	err := models.SaveTokens(db, sessionToken, csrfToken, uid)
+	if err != nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	err = setCookies(w, sessionToken, csrfToken, username)
+	if err != nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 }

@@ -46,6 +46,19 @@ func (h *DataHandler) register (w http.ResponseWriter, r *http.Request){
 		return
 	}
 
+	user, err := models.GetUserData(h.Db, d.Username)
+	if err != nil{
+		if err == sql.ErrNoRows{
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	utils.UserLogin(w, d.Username, h.Db, user.Id)
+
 	w.WriteHeader(http.StatusCreated)
 }
 
@@ -74,22 +87,7 @@ func (h *DataHandler) login (w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	sessionToken := utils.GenerateToken(32)
-	csrfToken := utils.GenerateToken(32)
-
-	err = models.SaveTokens(h.Db, sessionToken, csrfToken, user.Id)
-	if err != nil{
-		log.Println(err.Error())
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	err = utils.SetCookies(w, sessionToken, csrfToken, d.Username)
-	if err != nil{
-		log.Println(err.Error())
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
+	utils.UserLogin(w, d.Username, h.Db, user.Id)
 
 
 	w.WriteHeader(http.StatusOK)

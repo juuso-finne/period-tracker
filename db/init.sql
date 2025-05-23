@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS "period_data"(
     "start" DATE NOT NULL,
     "end" DATE,
     "user_id" UUID NOT NULL,
+    "notes" TEXT,
     FOREIGN KEY ("user_id") REFERENCES "user_data"("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 

@@ -4,6 +4,7 @@ type PeriodData struct{
 	Id int `json:"id"`
 	Start string `json:"start"`
 	End any `json:"end"`
+	Notes string `json:"notes"`
 }
 
 type LoginData struct{

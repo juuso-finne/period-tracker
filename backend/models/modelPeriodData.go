@@ -7,10 +7,11 @@ import(
 
 func GetPeriodData(db *sql.DB, uid string) ([]types.PeriodData, error){
 	query := `
-	SELECT id, start, "end"
-	FROM period_data
-	WHERE user_id = $1
-	ORDER BY start DESC`
+	    SELECT id, start, "end", notes
+	    FROM period_data
+	    WHERE user_id = $1
+	    ORDER BY start DESC
+    `
 
 	rows, err := db.Query(query, uid)
     if err != nil {
@@ -21,7 +22,7 @@ func GetPeriodData(db *sql.DB, uid string) ([]types.PeriodData, error){
 	var periods []types.PeriodData
     for rows.Next() {
         var p types.PeriodData
-        err := rows.Scan(&p.Id, &p.Start, &p.End)
+        err := rows.Scan(&p.Id, &p.Start, &p.End, &p.Notes)
         if err != nil {
             return nil, err
         }
@@ -37,20 +38,20 @@ func GetPeriodData(db *sql.DB, uid string) ([]types.PeriodData, error){
 
 func PostPeriodData(db *sql.DB, data *types.PeriodData, uid string) error{
     query := `
-        INSERT INTO period_data (user_id, start, "end")
-        VALUES ($1, $2, $3)
+        INSERT INTO period_data (user_id, start, "end", notes)
+        VALUES ($1, $2, $3, $4)
     `
-    _, err := db.Exec(query, uid, data.Start, data.End)
+    _, err := db.Exec(query, uid, data.Start, data.End, data.Notes)
     return err
 }
 
 func EditPeriodData(db *sql.DB, data *types.PeriodData) error{
     query := `
         UPDATE period_data
-        SET start = $1, "end" = $2
-        WHERE id = $3
+        SET start = $1, "end" = $2, notes = $3
+        WHERE id = $4
     `
-    _, err := db.Exec(query, data.Start, data.End, data.Id)
+    _, err := db.Exec(query, data.Start, data.End, data.Notes, data.Id)
     return err
 }
 

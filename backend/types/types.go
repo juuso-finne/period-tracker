@@ -20,4 +20,10 @@ type CompleteUserData struct{
 	Csrf any `json:"csrf"`
 }
 
+type SettingsData struct{
+	PlusMinus int `json:"plusminus"`
+	CycleLength int `json:"cycleLength"`
+
+}
+
 type ResourceOwnerIdExtractor func (resourceId int) (string, error)

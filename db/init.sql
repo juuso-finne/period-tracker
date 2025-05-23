@@ -16,9 +16,8 @@ CREATE TABLE IF NOT EXISTS "period_data"(
 );
 
 CREATE TABLE IF NOT EXISTS "default_settings"(
-    "id" SERIAL PRIMARY KEY,
-    "user_id" UUID NOT NULL,
-    "plus_minus" INT NOT NULL,
-    "cycle_length" INT NOT NULL,
+    "user_id" UUID PRIMARY KEY,
+    "plus_minus" INT DEFAULT 3 NOT NULL,
+    "cycle_length" INT DEFAULT 28 NOT NULL,
     FOREIGN KEY ("user_id") REFERENCES "user_data"("id") ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -95,7 +95,9 @@ func (h *DataHandler) editPeriodData(w http.ResponseWriter, r *http.Request){
 }
 
 func (h *DataHandler) deletePeriodData(w http.ResponseWriter, r *http.Request){
-	var d types.PeriodData
+	var d struct{
+		Id int `json:"id"`
+	}
 	err := json.NewDecoder(r.Body).Decode(&d)
 
 	if err != nil{

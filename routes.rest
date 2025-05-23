@@ -1,5 +1,5 @@
 @server = http://localhost:5000
-@token = 3oWzoPGhcaCNsqoOOj2EwPoKJfzih7a1FBUViAYf_Do=
+@token = VyRWbauoKW1cLAqvPndHBBSRgS2bbnQJIF8RxpdNJf8=
 
 ###
 GET {{server}}/health HTTP/1.1
@@ -78,13 +78,13 @@ X-CSRF-Token: {{token}}
 
 ###
 
-PUT {{server}}/settings HTTP/1.1
+PUT {{server}}/settings/ HTTP/1.1
 Content-Type: application/json
 X-CSRF-Token: {{token}}
 
 {
     "cycleLength": 30,
-    "plusMinus": 5,
+    "plusMinus": 5
 }
 
 ###

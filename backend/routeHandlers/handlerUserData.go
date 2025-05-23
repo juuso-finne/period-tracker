@@ -84,7 +84,7 @@ func (h *DataHandler) login (w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	err = utils.SetCookies(w, sessionToken, csrfToken)
+	err = utils.SetCookies(w, sessionToken, csrfToken, d.Username)
 	if err != nil{
 		log.Println(err.Error())
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

@@ -40,21 +40,6 @@ func GetUserData(db *sql.DB, username string) (*types.CompleteUserData, error){
 	return &d, nil
 }
 
-func GetUserDataBytoken(db *sql.DB, session string, csrf string) (*types.CompleteUserData, error){
-	query := `
-		SELECT id, username, password, session_token, csrf_token
-		FROM user_data
-		WHERE session_token = $1 AND csrf_token = $2
-	`
-	var d types.CompleteUserData
-	err := db.QueryRow(query, session, csrf).Scan(&d.Id, &d.Username, &d.Password, &d.Session, &d.Csrf)
-	if err != nil{
-		return nil, err
-	}
-
-	return &d, nil
-}
-
 func SaveTokens(db *sql.DB, session string, csrf string, uid string) error{
 	query := `
 		UPDATE user_data
@@ -62,7 +47,17 @@ func SaveTokens(db *sql.DB, session string, csrf string, uid string) error{
 		WHERE id = $3
 	`
 
-	_, err := db.Exec(query, session, csrf, uid)
+	stHash, err := bcrypt.GenerateFromPassword([]byte(session), 10)
+	if err != nil{
+		return err
+	}
+
+	csrfHash, err := bcrypt.GenerateFromPassword([]byte(csrf), 10)
+	if err != nil{
+		return err
+	}
+
+	_, err = db.Exec(query, stHash, csrfHash, uid)
 
 	return err
 }

@@ -1,6 +1,7 @@
 package routeHandlers
 
 import (
+	"backend/middleware"
 	"backend/models"
 	"backend/types"
 	"backend/utils"
@@ -15,9 +16,18 @@ import (
 func AddUserRoutes(mux *http.ServeMux, h *DataHandler){
 	dataRouter := http.NewServeMux()
 	dataRouter.HandleFunc("POST /register", h.register)
-	dataRouter.HandleFunc(("POST /login"), h.login)
+	dataRouter.HandleFunc("POST /login", h.login)
+
+	mwh := middleware.MiddlewareHandler{
+		Db: h.Db,
+	}
+
+	logoutRouter := http.NewServeMux()
+	authentication := middleware.CreateStack(&mwh, middleware.Authenticate)
+	logoutRouter.HandleFunc("PUT /", h.logout)
 
 	mux.Handle("/users/", http.StripPrefix("/users", dataRouter))
+	mux.Handle("/users/logout/", http.StripPrefix("/users/logout", authentication(logoutRouter, &mwh)))
 }
 
 func (h *DataHandler) register (w http.ResponseWriter, r *http.Request){
@@ -83,4 +93,16 @@ func (h *DataHandler) login (w http.ResponseWriter, r *http.Request){
 
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *DataHandler) logout (w http.ResponseWriter, r *http.Request){
+	uid := r.Header.Get("uid")
+
+	err := models.ClearTokens(h.Db, uid)
+
+	if err != nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 }

@@ -1,5 +1,5 @@
 @server = http://localhost:5000
-@token = iUDKKg9PxigPfOKJ2PvsNdSjvLCt1dyO7hL-vRZiYl0=
+@token = 8mEduaEAQ1XGlvxCRqE5Tid18iRuM4bawo10VhwnXNc=
 
 ###
 GET {{server}}/health HTTP/1.1
@@ -29,6 +29,11 @@ Content-Type: application/json
     "username": "testuser",
     "password": "12345"
 }
+
+###
+
+PUT {{server}}/users/logout/ HTTP/1.1
+X-CSRF-Token: {{token}}
 
 ###
 

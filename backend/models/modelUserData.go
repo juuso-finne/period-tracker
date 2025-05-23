@@ -21,7 +21,8 @@ func AddUserData(db *sql.DB, data *types.LoginData) error{
 		return err
 	}
 
-	return nil
+	err = AddSettingsData(db, data.Username)
+	return err
 }
 
 func GetUserData(db *sql.DB, username string) (*types.CompleteUserData, error){

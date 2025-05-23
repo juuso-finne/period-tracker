@@ -22,12 +22,13 @@ func AddUserRoutes(mux *http.ServeMux, h *DataHandler){
 		Db: h.Db,
 	}
 
-	logoutRouter := http.NewServeMux()
+	authedRouter := http.NewServeMux()
 	authentication := middleware.CreateStack(&mwh, middleware.Authenticate)
-	logoutRouter.HandleFunc("PUT /", h.logout)
+	authedRouter.HandleFunc("PUT /", h.logout)
+	authedRouter.HandleFunc("DELETE /", h.deleteUser)
 
 	mux.Handle("/users/", http.StripPrefix("/users", dataRouter))
-	mux.Handle("/users/logout/", http.StripPrefix("/users/logout", authentication(logoutRouter, &mwh)))
+	mux.Handle("/users/auth/", http.StripPrefix("/users/auth", authentication(authedRouter, &mwh)))
 }
 
 func (h *DataHandler) register (w http.ResponseWriter, r *http.Request){
@@ -103,4 +104,17 @@ func (h *DataHandler) logout (w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *DataHandler) deleteUser (w http.ResponseWriter, r *http.Request){
+	uid := r.Header.Get("uid")
+
+	err := models.DeleteUser(h.Db, uid)
+	if err != nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

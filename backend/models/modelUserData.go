@@ -73,3 +73,14 @@ func ClearTokens(db *sql.DB, uid string) error{
 
 	return err
 }
+
+func DeleteUser(db *sql.DB, uid string) error{
+	query := `
+		DELETE FROM user_data
+		WHERE id = $1
+	`
+
+	_, err := db.Exec(query, uid)
+
+	return err
+}

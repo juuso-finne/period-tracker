@@ -21,7 +21,7 @@ func AddSettingsRoutes(mux *http.ServeMux, h *DataHandler){
 	dataRouter.HandleFunc("GET /", h.getSettingsData)
 	dataRouter.HandleFunc("PUT /", h.editSettingsData)
 
-	mux.Handle("/data/", http.StripPrefix("/data", authentication(dataRouter, &mwh)))
+	mux.Handle("/settings/", http.StripPrefix("/settings", authentication(dataRouter, &mwh)))
 }
 
 func (h *DataHandler) getSettingsData(w http.ResponseWriter, r *http.Request){

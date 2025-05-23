@@ -45,6 +45,7 @@ func main(){
 
 	routeHandlers.AddDataRoutes(mux, &h)
 	routeHandlers.AddUserRoutes(mux, &h)
+	routeHandlers.AddSettingsRoutes(mux, &h)
 
 
 	fmt.Printf("API listening on port %s\n", port)

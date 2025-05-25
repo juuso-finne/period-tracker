@@ -24,7 +24,7 @@ func AddUserRoutes(mux *http.ServeMux, h *DataHandler){
 
 	authedRouter := http.NewServeMux()
 	authentication := middleware.CreateStack(&mwh, middleware.Authenticate)
-	authedRouter.HandleFunc("PUT /", h.logout)
+	authedRouter.HandleFunc("PUT /logout", h.logout)
 	authedRouter.HandleFunc("DELETE /", h.deleteUser)
 
 	mux.Handle("/users/", http.StripPrefix("/users", dataRouter))

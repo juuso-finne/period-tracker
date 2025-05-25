@@ -1,5 +1,5 @@
 @server = http://localhost:5000
-@token = ptdhoT5mJRHBQc2ggw_LYB8CxcT6t0iEKDmJGxhzIHU=
+@token = u2Je5QPf7cXezLOtp6JdmmtVGpkWwMEPIxIbtYE6QXk=
 
 ###
 GET {{server}}/health HTTP/1.1
@@ -32,13 +32,13 @@ POST {{server}}/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "testuser2",
+    "username": "testuser",
     "password": "12345"
 }
 
 ###
 
-PUT {{server}}/users/auth/ HTTP/1.1
+PUT {{server}}/users/auth/logout HTTP/1.1
 X-CSRF-Token: {{token}}
 
 ###
@@ -49,8 +49,8 @@ X-CSRF-Token: {{token}}
 
 {
     "id": null,
-    "start": "2025-02-07",
-    "end": "2025-02-09"
+    "start": "2025-03-07",
+    "end": "2025-03-12"
 }
 
 ###
@@ -60,9 +60,9 @@ Content-Type: application/json
 X-CSRF-Token: {{token}}
 
 {
-    "id": 1,
-    "start": "2025-03-05",
-    "end": "2025-03-09",
+    "id": 5,
+    "start": "2025-02-06",
+    "end": "2025-02-12",
     "notes": "Heavy flow"
 }
 
@@ -73,7 +73,7 @@ Content-Type: application/json
 X-CSRF-Token: {{token}}
 
 {
-    "id": 2
+    "id": 4
 }
 
 ###

@@ -10,9 +10,13 @@ import (
 )
 
 func main(){
-	if err := godotenv.Load("../.env"); err != nil{
-		log.Fatalf("Error loading .env file")
+
+	if _, inDocker := os.LookupEnv("IN_DOCKER"); !inDocker{
+		if err := godotenv.Load("../.env"); err != nil{
+			log.Fatalf("Error loading .env file")
+		}
 	}
+
 
 	port, exists := os.LookupEnv("PORT")
 	if !exists{

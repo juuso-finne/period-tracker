@@ -29,21 +29,21 @@ func AddSettingsData(db *sql.DB, username string) error{
 func EditSettingsData(db *sql.DB, data *types.SettingsData, uid string) error{
 	query := `
 		UPDATE default_settings
-		SET plus_minus = $1, cycle_length = $2
-		WHERE user_id = $3
+		SET plus_minus = $1, cycle_length = $2, use_defaults = $3
+		WHERE user_id = $4
 	`
-	_, err := db.Exec(query, data.PlusMinus, data.CycleLength, uid)
+	_, err := db.Exec(query, data.PlusMinus, data.CycleLength, data.UseDefaults, uid)
 	return err
 }
 
 func GetSettingsData(db *sql.DB, uid string) (*types.SettingsData, error){
 	query := `
-		SELECT plus_minus, cycle_length
+		SELECT plus_minus, cycle_length, use_defaults
 		FROM default_settings
 		WHERE user_id = $1
 	`
 	var data types.SettingsData
-	err := db.QueryRow(query, uid).Scan(&data.PlusMinus, &data.CycleLength)
+	err := db.QueryRow(query, uid).Scan(&data.PlusMinus, &data.CycleLength, &data.UseDefaults)
 	if err != nil{
 		return nil, err
 	}

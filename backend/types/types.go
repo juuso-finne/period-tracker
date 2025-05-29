@@ -24,6 +24,7 @@ type SettingsData struct{
 	PlusMinus int `json:"plusMinus"`
 	CycleLength int `json:"cycleLength"`
 	UseDefaults bool `json:"useDefaults"`
+	Threshold int `json:"threshold"`
 
 }
 

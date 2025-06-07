@@ -1,5 +1,5 @@
 @server = http://localhost:5000
-@token = chLk1N512Z_QKlP2zkIa0eiKlBIPTu2l6twdP7AJR6A=
+@token = tyG39QKyrawkeiGQvY72S0XxzAONGpvoLD1G_dxHfjg=
 
 ###
 GET {{server}}/health HTTP/1.1

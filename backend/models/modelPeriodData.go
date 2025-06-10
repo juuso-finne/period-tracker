@@ -19,7 +19,7 @@ func GetPeriodData(db *sql.DB, uid string) ([]types.PeriodData, error){
     }
     defer rows.Close()
 
-	var periods []types.PeriodData
+	var periods []types.PeriodData = make([]types.PeriodData, 0)
     for rows.Next() {
         var p types.PeriodData
         err := rows.Scan(&p.Id, &p.Start, &p.End, &p.Notes)

@@ -8,6 +8,7 @@ export const login = async (info: LoginInfo): Promise<Response> => {
     const response = await fetch(api_url, {
         method: "POST",
         headers: headers,
+        credentials: "include",
         body: JSON.stringify(info)
     })
 

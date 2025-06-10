@@ -37,6 +37,7 @@ func setCookies(w http.ResponseWriter, session string, csrf string, username str
 		Expires: time.Now().Add(d),
 		HttpOnly: true,
 		Path: "/",
+		SameSite: http.SameSiteLaxMode,
 	})
 
 	http.SetCookie(w, &http.Cookie{
@@ -45,14 +46,16 @@ func setCookies(w http.ResponseWriter, session string, csrf string, username str
 		Expires: time.Now().Add(d),
 		HttpOnly: false,
 		Path: "/",
+		SameSite: http.SameSiteLaxMode,
 	})
 
 	http.SetCookie(w, &http.Cookie{
 		Name: "username",
 		Value: username,
 		Expires: time.Now().Add(d),
-		HttpOnly: true,
+		HttpOnly: false,
 		Path: "/",
+		SameSite: http.SameSiteLaxMode,
 	})
 
 	return nil

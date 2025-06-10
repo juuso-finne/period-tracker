@@ -7,6 +7,7 @@ import (
 	"os"
 	"fmt"
 	"backend/routeHandlers"
+	"backend/middleware"
 )
 
 func main(){
@@ -53,7 +54,7 @@ func main(){
 
 
 	fmt.Printf("API listening on port %s\n", port)
-	http.ListenAndServe(port, mux)
+	http.ListenAndServe(port, middleware.CheckCORS(mux))
 
 
 }

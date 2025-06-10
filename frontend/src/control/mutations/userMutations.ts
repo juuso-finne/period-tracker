@@ -3,15 +3,16 @@ import { useMutation } from "@tanstack/react-query"
 import {login} from "../../model/API/userData"
 
 
-export const useLoginMutation = (setErrorText: React.Dispatch<React.SetStateAction<string>>) => {
+export const useLoginMutation = (updateFunction: () => void) => {
 
     return useMutation({
         mutationFn: login,
         onSuccess: () => {
-            setErrorText("Login successful")
+            console.log("Login successful")
+            updateFunction();
         },
         onError: (error) => {
-            setErrorText(error.message);
+            console.log(error.message);
         }
     });
 }

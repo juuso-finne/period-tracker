@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useLoginMutation } from "./control/mutations/userMutations";
 import LoginRegisterForm from "./view/components/scripts/LoginRegisterForm"
 import { getCookie } from "./control/cookies";
+import type { LoginInfo } from "./types";
 import {z} from "zod"
 
   const Period = z.object({
@@ -10,11 +11,6 @@ import {z} from "zod"
     end: z.nullable(z.string()),
     notes: z.string()
   })
-
-  const userData = {
-    username: "testuser",
-    password: "12345"
-  }
 
 function App() {
 
@@ -30,7 +26,7 @@ function App() {
     }
   },[username])
 
-    const updateUsername = () => {
+  const updateUsername = () => {
     const username = getCookie("username")
     setUsername(username || "");
   }
@@ -43,8 +39,7 @@ function App() {
     console.log(result)
   }, [])
 
-  const loginFunction = (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const loginFunction = (userData: LoginInfo) => {
     loginMutation.mutate(userData)
   }
 
@@ -54,7 +49,7 @@ function App() {
     <>
       <h1 className="text-red-400">Period tracker</h1>
       <p>{greeting}</p>
-      <LoginRegisterForm props={{ submitHandler: loginFunction, prompt: "Login" }} />
+      <LoginRegisterForm submitHandler={loginFunction} prompt={"Log in"} />
 {/*       <button
         className="btn btn-danger"
         onClick={() => {

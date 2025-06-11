@@ -49,10 +49,6 @@ func (h *DataHandler) register (w http.ResponseWriter, r *http.Request){
 
 	user, err := models.GetUserData(h.Db, d.Username)
 	if err != nil{
-		if err == sql.ErrNoRows{
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
 		log.Println(err.Error())
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
@@ -84,7 +80,7 @@ func (h *DataHandler) login (w http.ResponseWriter, r *http.Request){
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(d.Password))
 	if err != nil{
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		http.Error(w, "Wrong username or password", http.StatusUnauthorized)
 		return
 	}
 

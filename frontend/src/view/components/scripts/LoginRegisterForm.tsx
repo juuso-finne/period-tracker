@@ -15,7 +15,10 @@ const LoginRegisterForm = (props: Props) => {
 
     const handleSubmit = (e?: React.FormEvent) => {
         e?.preventDefault();
-        if (usernameRef.current && passwordRef.current) {
+        if (!usernameRef.current || !passwordRef.current){
+            return;
+        }
+        if (usernameRef.current.value.length !== 0 && passwordRef.current.value.length !== 0) {
             const userData: LoginInfo = {
                 username: usernameRef.current.value,
                 password: passwordRef.current.value

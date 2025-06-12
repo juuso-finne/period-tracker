@@ -1,8 +1,4 @@
 @layer components {
-  .btn {
-    @apply px-4 py-2 rounded-lg shadow-md hover:shadow-gray-500 shadow-black;
-  }
-
   .btn-primary{
     @apply bg-blue-600 text-white
   }

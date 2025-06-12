@@ -32,7 +32,7 @@ const LoginRegisterForm = (props: Props) => {
                 <input ref={usernameRef} type="text" id="usernameInput"></input>
                 <label htmlFor="passwordInput">Password:</label>
                 <input ref={passwordRef} type="password" id="passwordInput"></input>
-                <button className="btn btn-primary" onClick={handleSubmit}>{prompt}</button>
+                <button className="btn-primary" onClick={handleSubmit}>{prompt}</button>
             </form>
         </div>
     )

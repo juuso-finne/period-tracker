@@ -84,3 +84,18 @@ func DeleteUser(db *sql.DB, uid string) error{
 
 	return err
 }
+
+func UserExists(db *sql.DB, username string)(bool, error){
+	query := `
+		SELECT COUNT(*)
+		FROM user_data
+		WHERE username = $1
+	`
+	var count int
+	err := db.QueryRow(query, username).Scan(&count)
+	if err != nil{
+		return false, err
+	}
+
+	return count != 0, nil
+}

@@ -40,6 +40,18 @@ func (h *DataHandler) register (w http.ResponseWriter, r *http.Request){
 		return
 	}
 
+	userExists, err := models.UserExists(h.Db, d.Username)
+	if err !=nil{
+		log.Println(err.Error())
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	if userExists{
+		http.Error(w, "Username is taken", http.StatusBadRequest)
+		return
+	}
+
 	err = models.AddUserData(h.Db, &d)
 	if err !=nil{
 		log.Println(err.Error())

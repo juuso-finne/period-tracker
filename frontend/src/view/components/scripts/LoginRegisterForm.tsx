@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import type { LoginInfo } from "../../../types";
+import type { LoginInfo } from "../../../model/types";
 
 type Props= {
     submitHandler: (userData: LoginInfo) => void,

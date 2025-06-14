@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useLoginMutation, useRegisterMutation } from "../../control/mutations/userMutations";
 import LoginRegisterForm from "../components/scripts/LoginRegisterForm"
-import type { LoginInfo } from "../../types";
+import type { LoginInfo } from "../../model/types";
 
 export default function LoginRegisterPage() {
     const [existingUser, setExistingUser] = useState<boolean>(true);
@@ -40,11 +40,11 @@ export default function LoginRegisterPage() {
                 prompt = {existingUser ? "Log in" : "Register"}
             />
             <p className="text-red-400">{errorMessage}</p>
-            <a href="#" className="text-blue-700"  onClick={() => setExistingUser(prev => !prev)}>{
+            <p className="text-blue-700 cursor-pointer"  onClick={() => setExistingUser(prev => !prev)}>{
                 existingUser ?
                 "Don't have an account? Click here to register"
                 : "Already have an account? Click here to log in"
-            }</a>
+            }</p>
         </>
     )
 }

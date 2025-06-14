@@ -1,4 +1,4 @@
-import type { LoginInfo } from "../../types"
+import type { LoginInfo } from "../types"
 import constructHeaders from "../constructHeaders"
 
 export const login = async (info: LoginInfo): Promise<Response> => {

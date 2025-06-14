@@ -1,12 +1,12 @@
 @server = http://localhost:5000
-@token =EyrcqAUwJ-0OsP6tXYGRweDYg4sZG0EFHGMXXbmDCWA=
+@token = G1qEXlpMFYFN9HPpuxksNI90rSJvNSHouCZvOPjQOMI=
 
 ###
 GET {{server}}/health HTTP/1.1
 
 ###
 
-GET {{server}}/data/ HTTP/1.1
+GET {{server}}/data HTTP/1.1
 X-CSRF-Token: {{token}}
 Content-Type: application/json
 

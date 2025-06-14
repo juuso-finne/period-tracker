@@ -1,20 +1,8 @@
-
 import LoginRegisterPage from "./view/pages/LoginRegisterPage"
 
-import {z} from "zod"
 
-  const Period = z.object({
-    id: z.number(),
-    start: z.string(),
-    end: z.nullable(z.string()),
-    notes: z.string()
-  })
 
 function App() {
-
-
-
-
 
   return (
     <>

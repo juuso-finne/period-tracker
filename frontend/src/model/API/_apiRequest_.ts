@@ -15,7 +15,6 @@ import type { Method } from "../types";
 
     if (!response.ok){
         const errorText = await response.text();
-        console.log(errorText)
         throw new Error(errorText);
     }
 

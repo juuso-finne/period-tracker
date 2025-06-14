@@ -1,5 +1,5 @@
 @server = http://localhost:5000
-@token = G1qEXlpMFYFN9HPpuxksNI90rSJvNSHouCZvOPjQOMI=
+@token = THoqNzSAXpu0q0InY5RFqa446M8NB80QXGg7F5BAkI4=
 
 ###
 GET {{server}}/health HTTP/1.1
@@ -9,6 +9,7 @@ GET {{server}}/health HTTP/1.1
 GET {{server}}/data HTTP/1.1
 X-CSRF-Token: {{token}}
 Content-Type: application/json
+Body: undefined
 
 
 ###
@@ -50,8 +51,9 @@ X-CSRF-Token: {{token}}
 
 {
     "id": null,
-    "start": "2025-03-07",
-    "end": "2025-03-12"
+    "start": "2025-04-08",
+    "end": "2025-04-10",
+    "notes": "Heavy flow"
 }
 
 ###

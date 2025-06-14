@@ -1,40 +1,18 @@
 import type { LoginInfo } from "../types"
-import constructHeaders from "../constructHeaders"
+import apiRequest  from "./_apiRequest_";
 
 export const login = async (info: LoginInfo): Promise<Response> => {
-    const headers = constructHeaders();
-    const api_url = "http://localhost:5000/users/login"
-
-    const response = await fetch(api_url, {
-        method: "POST",
-        headers: headers,
-        credentials: "include",
-        body: JSON.stringify(info)
-    })
-
-    if (!response.ok){
-        const errorText = await response.text();
-        throw new Error(errorText);
+    try{
+        return await apiRequest("POST", "/users/login", JSON.stringify(info))
+    } catch (error){
+        throw new Error(error instanceof Error ? error.message : String(error))
     }
-
-    return response;
 }
 
 export const register = async (info: LoginInfo): Promise<Response> => {
-    const headers = constructHeaders();
-    const api_url = "http://localhost:5000/users/register"
-
-    const response = await fetch(api_url, {
-        method: "POST",
-        headers: headers,
-        credentials: "include",
-        body: JSON.stringify(info)
-    })
-
-    if (!response.ok){
-        const errorText = await response.text();
-        throw new Error(errorText);
+    try{
+        return await apiRequest("POST", "/users/register", JSON.stringify(info))
+    } catch (error){
+        throw new Error(error instanceof Error ? error.message : String(error))
     }
-
-    return response;
 }

@@ -1,5 +1,5 @@
 import constructHeaders from "../constructHeaders";
-import type { Method } from "../types";
+type Method = "GET" | "POST" | "PUT" | "DELETE"
 
     const apiRequest = async (method: Method, routeURL: string, body?: string): Promise<Response> => {
     const headers = constructHeaders();

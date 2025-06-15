@@ -1,7 +1,7 @@
 import * as schemas from './zodSchemas'
 import {z} from "zod"
 
-export type Method = "GET" | "POST" | "PUT" | "DELETE"
+
 
 export type LoginInfo = {
     username: string;

@@ -44,6 +44,9 @@ func main(){
 		w.Write([]byte("OK"))
 	})
 
+	fs := http.FileServer(http.Dir("./public/images"))
+	mux.Handle("/images/", http.StripPrefix("/images/", fs))
+
 	h := routeHandlers.DataHandler{
 		Db: db,
 	}

@@ -8,5 +8,5 @@ export type LoginInfo = {
     password: string
 }
 
-export type Period = z.infer<typeof schemas.periodSchema>
+export type PeriodData = z.infer<typeof schemas.periodSchema>
 export type Settings = z.infer<typeof schemas.settingsSchema>

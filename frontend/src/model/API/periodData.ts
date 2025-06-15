@@ -1,8 +1,8 @@
 import apiRequest from "./_apiRequest_";
 import { periodSchema } from "../zodSchemas";
-import type { Period } from "../types"
+import type { PeriodData } from "../types"
 
-export const getPeriodData = async (): Promise<Period[]> => {
+export const getPeriodData = async (): Promise<PeriodData[]> => {
     try {
         const response = await apiRequest("GET", "/data");
         return periodSchema.array().parseAsync(await response.json());

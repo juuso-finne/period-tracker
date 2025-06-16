@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { skipToken, useQuery } from "@tanstack/react-query"
 import LoginRegisterPage from "./view/pages/LoginRegisterPage"
+import Calendar from "./view/components/scripts/Calendar";
 import { getPeriodData } from "./model/API/periodData"
 import { getCookie } from "./control/cookies";
 
@@ -29,11 +30,12 @@ function App() {
       {data && data.map((period, i) =>
         <div key = {i} className="border-2 my-4 p-2 w-fit">
           <p>id: {period.id}</p>
-          <p>start: {period.start.toISOString().split("T")[0]}</p>
-          <p>end: {period.end?.toISOString().split("T")[0]}</p>
+          <p>start: {period.start.isoStringDateOnly()}</p>
+          <p>end: {period.end?.isoStringDateOnly()}</p>
           <p>notes: {period.notes}</p>
         </div>
       )}
+      <Calendar/>
     </>
   )
 }

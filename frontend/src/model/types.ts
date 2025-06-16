@@ -1,7 +1,12 @@
 import * as schemas from './zodSchemas'
 import {z} from "zod"
 
-
+export type CalendarDayProps = {
+    period: number | null,
+    day: CustomDate,
+    isSelected: boolean,
+    isSelectedFixed: boolean
+}
 
 export type LoginInfo = {
     username: string;

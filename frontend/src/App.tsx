@@ -27,8 +27,8 @@ function App() {
       <LoginRegisterPage />
       {isFetching ? <p>Loading...</p> : <></>}
       {error ? <p>{error.message}</p> : <></>}
-      {data && data.map((period, i) =>
-        <div key = {i} className="border-2 my-4 p-2 w-fit">
+      {data && data.map((period) =>
+        <div key = {period.id} className="border-2 my-4 p-2 w-fit">
           <p>id: {period.id}</p>
           <p>start: {period.start.isoStringDateOnly()}</p>
           <p>end: {period.end?.isoStringDateOnly()}</p>

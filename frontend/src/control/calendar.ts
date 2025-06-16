@@ -4,7 +4,7 @@ export function changeMonth(setMonth: React.Dispatch<React.SetStateAction<number
     setMonth(parseInt(selector.current?.value || "0"))
 }
 
-export function changeYear(setYear: React.Dispatch<React.SetStateAction<number>>, selector: React.RefObject<HTMLSelectElement | null>){
+export function changeYear(setYear: React.Dispatch<React.SetStateAction<number>>, selector: React.RefObject<HTMLInputElement | null>){
     setYear(parseInt(selector.current?.value || new Date().getFullYear().toString()))
 }
 export function getDays(month: number, year:number): number[]{

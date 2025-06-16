@@ -14,9 +14,6 @@ export default function Calendar() {
     const monthSelector = useRef<HTMLSelectElement>(null);
     const yearSelector = useRef<HTMLInputElement>(null);
 
-/*     const changeMonth = () => {
-        setMonth(parseInt(monthSelector.current?.value || "0"));
-    } */
   return (
     <div className="w-md">
         <div className="flex">
@@ -24,7 +21,7 @@ export default function Calendar() {
                 {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
             </select>
 
-            <input type="number" min="1900" max={new Date().getFullYear() + 5} ref={yearSelector} defaultValue={year} onChange={() => setYear(parseInt(yearSelector.current?.value || new Date().getFullYear().toString()))}/>
+            <input type="number" min="1900" max={new Date().getFullYear() + 5} ref={yearSelector} defaultValue={year} onChange={() => calendarUtils.changeYear(setYear, yearSelector)}/>
         </div>
             <div className='calendar-grid'>
                 {days.map((day, i) => <div className="text-center" key={i}>{day}</div>)}

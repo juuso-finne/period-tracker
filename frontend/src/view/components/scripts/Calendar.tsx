@@ -15,7 +15,7 @@ export default function Calendar() {
     const yearSelector = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="w-md">
+    <div className="w-1/2">
         <div className="flex">
             <select ref={monthSelector} onChange={() => calendarUtils.changeMonth(setMonth, monthSelector)} defaultValue={month}>
                 {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
@@ -23,7 +23,7 @@ export default function Calendar() {
 
             <input type="number" min="1900" max={new Date().getFullYear() + 5} ref={yearSelector} defaultValue={year} onChange={() => calendarUtils.changeYear(setYear, yearSelector)}/>
         </div>
-            <div className='calendar-grid'>
+            <div className='grid grid-cols-7 border'>
                 {days.map((day, i) => <div className="text-center" key={i}>{day}</div>)}
                 {calendarUtils.getDays(month, year).map((day, i) => <div className="text-center" key={i}>{day}</div>)}
             </div>

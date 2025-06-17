@@ -30,7 +30,7 @@ export class CustomDate extends Date{
         return this.toISOString().split("T")[0];
     }
 
-    static fromUTC(year: number, month: number, day:number) : CustomDate{
+    static UTCFromValues(year: number, month: number, day:number) : CustomDate{
         return new CustomDate((Date.UTC(year, month, day)))
     }
 }

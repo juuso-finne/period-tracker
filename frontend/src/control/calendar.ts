@@ -8,7 +8,7 @@ export function changeYear(setYear: React.Dispatch<React.SetStateAction<number>>
     setYear(parseInt(selector.current?.value || new Date().getFullYear().toString()))
 }
 export function getDays(month: number, year:number): number[]{
-    const startDate = new CustomDate(year, month)
+    const startDate = CustomDate.fromUTC(year, month, 1)
 
     // This is done to make the week start on Monday
     const offset = (startDate.getDay() + 6) % 7

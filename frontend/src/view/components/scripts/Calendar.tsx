@@ -22,7 +22,7 @@ export default function Calendar() {
     const monthSelector = useRef<HTMLSelectElement>(null);
     const yearSelector = useRef<HTMLInputElement>(null);
     const props = {
-        period: null,
+        period: 1,
         day: new CustomDate(),
         isSelected: false,
         isSelectedFixed: false
@@ -51,9 +51,9 @@ function CalendarDay(props: CalendarDayProps){
     const {period, day, isSelected, isSelectedFixed} = props;
 
     return(
-        <div className={`relative border hover:selected min-h-7 md:min-h-12 p-[5%] ${isSelected ? " selected" : ""}`}>
+        <div className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected || isSelectedFixed ? " selected" : ""}`}>
             {day.getUTCDate()}
-            {period ? <img className="size-5 absolute top-[0%] right-[0%]" src="http://localhost:5000/images/blood_icon.png"/> : null}
+            {period ? <img className="size-5 absolute top-[0%] right-[0%] md:top-2 md:right-5" src="http://localhost:5000/images/blood_icon.png"/> : null}
         </div>
     )
 }

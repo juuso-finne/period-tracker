@@ -20,14 +20,14 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  }, [data])
+  }, [])
   return (
     <>
       <h1 className="text-red-400">Period tracker</h1>
       <LoginRegisterPage />
       {isFetching ? <p>Loading...</p> : <></>}
       {error ? <p>{error.message}</p> : <></>}
-      {data && data.map((period) =>
+      {(data || []).map((period) =>
         <div key = {period.id} className="border-2 my-4 p-2 w-fit">
           <p>id: {period.id}</p>
           <p>start: {period.start.isoStringDateOnly()}</p>

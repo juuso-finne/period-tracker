@@ -14,9 +14,13 @@ export function getDays(month: number, year:number): CustomDate[]{
     const offset = (startDate.getDay() + 6) % 7
 
     const days: CustomDate[] = []
+
+    // 6 weeks, i.e. 42 days is enough to fully show any calendar month
     for (let i = 1; i < 43; i++){
         const newDate = CustomDate.UTCFromValues(year, month, i - offset)
-        if ((newDate.getUTCMonth() > month || newDate.getUTCFullYear() > year) && i % 7 === 1){
+
+        // Don't add a new week if it's entirely in the next month
+        if (newDate.getUTCMonth() === (month + 1) % 12 && i % 7 === 1){
             break;
         }
         days.push(newDate)

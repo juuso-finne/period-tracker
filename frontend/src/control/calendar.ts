@@ -1,4 +1,4 @@
-import { CustomDate } from "../model/types"
+import{ CustomDate, type CalendarDayProps, type PeriodData } from "../model/types"
 
 export function changeMonth(setMonth: React.Dispatch<React.SetStateAction<number>>, selector: React.RefObject<HTMLSelectElement | null>){
     setMonth(parseInt(selector.current?.value || "0"))
@@ -26,4 +26,25 @@ export function getDays(month: number, year:number): CustomDate[]{
         days.push(newDate)
     }
     return days
+}
+
+export function getDayProps(days: CustomDate[], data: PeriodData[], selectionBegin: number|null, selectionEnd: number|null): CalendarDayProps[]{
+    const selection = selectionBegin !== null && selectionEnd !== null
+    const props: CalendarDayProps[] = []
+    const eligibleData = data.filter(i => (i.end || CustomDate.todayAsUTC()) >= days[0] && i.start <= days[days.length - 1]);
+    console.log ( CustomDate.todayAsUTC())
+    days.forEach((day, i) => {
+        const period = eligibleData.find(data => day.isBetween(data.start, data.end || CustomDate.todayAsUTC()))
+
+
+        const newProps: CalendarDayProps = {
+            day,
+            isSelected: selection && i >= selectionBegin && i <= selectionEnd,
+            period: period ? period.id : null,
+            isSelectedFixed: false
+        }
+
+        props.push(newProps);
+    })
+    return props;
 }

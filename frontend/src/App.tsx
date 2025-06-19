@@ -35,7 +35,7 @@ function App() {
           <p>notes: {period.notes}</p>
         </div>
       )}
-      <Calendar/>
+      <Calendar periodData={data || []}/>
     </>
   )
 }

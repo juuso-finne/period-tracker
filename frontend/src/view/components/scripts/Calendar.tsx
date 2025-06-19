@@ -1,18 +1,19 @@
-import type { CalendarDayProps } from "../../../model/types";
+import type { CalendarDayProps, PeriodData } from "../../../model/types";
+type Props = {
+    periodData: PeriodData[]
+}
 
-import { useRef, useState, useEffect} from "react";
+import { useRef, useState, useMemo, useEffect} from "react";
 import * as calendarUtils from "../../../control/calendar"
-import { CustomDate } from "../../../model/types";
 
-export default function Calendar() {
+export default function Calendar(props: Props) {
+
+    const {periodData} = props;
 
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
-    const [days, setDays] = useState<CustomDate[]>([]);
 
-    useEffect(() =>{
-        setDays(calendarUtils.getDays(month, year))
-    },[month, year])
+    const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 
     const months = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
@@ -21,12 +22,11 @@ export default function Calendar() {
 
     const monthSelector = useRef<HTMLSelectElement>(null);
     const yearSelector = useRef<HTMLInputElement>(null);
-    const props = {
-        period: 1,
-        day: new CustomDate(),
-        isSelected: false,
-        isSelectedFixed: false
-    }
+    const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, null, null));
+
+    useEffect(() =>{
+        setPropArray(() => calendarUtils.getDayProps(days, periodData, null, null))
+    },[days, periodData])
 
   return (
     <div className="flex flex-col items-center mx-2 md:mx-0">
@@ -40,7 +40,7 @@ export default function Calendar() {
 
             <div className='grid grid-cols-7 border'>
                 {weekDays.map((day, i) => <div className="text-center" key={i}>{day}</div>)}
-                {days.map((day, i) => <CalendarDay {...props} day={day} key={i}/>)}
+                {propArray.map((dayProps, i) => <CalendarDay {...dayProps} key={i}/>)}
             </div>
         </div>
     </div>

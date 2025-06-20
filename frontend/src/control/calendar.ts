@@ -28,18 +28,19 @@ export function getDays(month: number, year:number): CustomDate[]{
     return days
 }
 
-export function getDayProps(days: CustomDate[], data: PeriodData[], selectionBegin: number|null, selectionEnd: number|null): CalendarDayProps[]{
+export function getDayProps(days: CustomDate[], data: PeriodData[], selectionBegin: CustomDate|null, selectionEnd: CustomDate|null): CalendarDayProps[]{
     const selection = selectionBegin !== null && selectionEnd !== null
     const props: CalendarDayProps[] = []
-    const eligibleData = data.filter(i => (i.end || CustomDate.todayAsUTC()) >= days[0] && i.start <= days[days.length - 1]);
-    console.log ( CustomDate.todayAsUTC())
-    days.forEach((day, i) => {
-        const period = eligibleData.find(data => day.isBetween(data.start, data.end || CustomDate.todayAsUTC()))
+    const dataWithEnd = data.map( p => ({...p, end: p.end ? p.end : CustomDate.todayAsUTC()}));
+    const eligibleData = dataWithEnd.filter(i => (i.end) >= days[0] && i.start <= days[days.length - 1]);
+
+    days.forEach((day) => {
+        const period = eligibleData.find(item => day.isBetween(item.start, item.end))
 
 
         const newProps: CalendarDayProps = {
             day,
-            isSelected: selection && i >= selectionBegin && i <= selectionEnd,
+            isSelected: selection && day >= selectionBegin && day <= selectionEnd,
             period: period ? period.id : null,
             isSelectedFixed: false
         }

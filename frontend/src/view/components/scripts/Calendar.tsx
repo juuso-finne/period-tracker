@@ -1,4 +1,4 @@
-import type { CalendarDayProps, PeriodData } from "../../../model/types";
+import { CustomDate, type CalendarDayProps, type PeriodData } from "../../../model/types";
 type Props = {
     periodData: PeriodData[]
 }
@@ -12,6 +12,8 @@ export default function Calendar(props: Props) {
 
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
+    const [hoverTarget, setHoverTarget] = useState<CustomDate|null>(null);
+    const [pivot, setPivot] = useState<CustomDate|null>(null);
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 
@@ -20,13 +22,25 @@ export default function Calendar(props: Props) {
 
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
+    const hoverHandler = (d: CustomDate) => {
+        setHoverTarget(d);
+    }
+
+    const clickHandler = (d:CustomDate) => {
+        if (pivot){
+            setPivot(null);
+            return;
+        }
+        setPivot(d);
+    }
+
     const monthSelector = useRef<HTMLSelectElement>(null);
     const yearSelector = useRef<HTMLInputElement>(null);
     const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, null, null));
 
     useEffect(() =>{
-        setPropArray(() => calendarUtils.getDayProps(days, periodData, null, null))
-    },[days, periodData])
+        setPropArray(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));
+    },[days, periodData, hoverTarget, pivot])
 
   return (
     <div className="flex flex-col items-center mx-2 md:mx-0">
@@ -40,18 +54,29 @@ export default function Calendar(props: Props) {
 
             <div className='grid grid-cols-7 border'>
                 {weekDays.map((day, i) => <div className="text-center" key={i}>{day}</div>)}
-                {propArray.map((dayProps, i) => <CalendarDay {...dayProps} key={i}/>)}
+
+            </div>
+            <div className='grid grid-cols-7' onMouseLeave={() => setHoverTarget(null)}>
+                {propArray.map((dayProps, i) => <CalendarDay {...dayProps} hoverHandler={hoverHandler} clickHandler={clickHandler} key={i}/>)}
             </div>
         </div>
     </div>
   )
 }
 
-function CalendarDay(props: CalendarDayProps){
-    const {period, day, isSelected, isSelectedFixed} = props;
+function CalendarDay(
+    props: CalendarDayProps &
+    { hoverHandler: (_:CustomDate) => void } &
+    { clickHandler: (_:CustomDate) => void}
+) {
+    const {period, day, isSelected, isSelectedFixed, hoverHandler, clickHandler} = props;
 
     return(
-        <div className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected || isSelectedFixed ? " selected" : ""}`}>
+        <div
+            className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected || isSelectedFixed ? " selected" : ""}`}
+            onMouseEnter={() => hoverHandler(day)}
+            onClick={() => clickHandler(day)}
+        >
             {day.getUTCDate()}
             {period ? <img className="size-5 absolute top-[0%] right-[0%] md:top-2 md:right-5" src="http://localhost:5000/images/blood_icon.png"/> : null}
         </div>

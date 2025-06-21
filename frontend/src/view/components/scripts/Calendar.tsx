@@ -14,6 +14,7 @@ export default function Calendar(props: Props) {
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate|null>(null);
     const [pivot, setPivot] = useState<CustomDate|null>(null);
+    const [openSelection, setOpenSelection] = useState<boolean>(false);
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 
@@ -23,14 +24,23 @@ export default function Calendar(props: Props) {
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
     const hoverHandler = (d: CustomDate) => {
-        setHoverTarget(d);
+        if (openSelection){
+            setHoverTarget(d);
+        }
     }
 
     const clickHandler = (d:CustomDate) => {
-        if (pivot){
+        if (openSelection){
+            setOpenSelection(false);
+            return
+        }
+        if (pivot && hoverTarget){
             setPivot(null);
+            setHoverTarget(null);
             return;
         }
+
+        setOpenSelection(true);
         setPivot(d);
     }
 
@@ -45,6 +55,7 @@ export default function Calendar(props: Props) {
   return (
     <div className="flex flex-col items-center mx-2 md:mx-0">
         <div className=" w-full md:w-3/4 ">
+
             <div className="flex justify-center">
                 <select className="border" ref={monthSelector} onChange={() => calendarUtils.changeMonth(setMonth, monthSelector)} defaultValue={month}>
                     {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
@@ -54,11 +65,12 @@ export default function Calendar(props: Props) {
 
             <div className='grid grid-cols-7 border'>
                 {weekDays.map((day, i) => <div className="text-center" key={i}>{day}</div>)}
-
             </div>
-            <div className='grid grid-cols-7' onMouseLeave={() => setHoverTarget(null)}>
+
+            <div className='grid grid-cols-7'>
                 {propArray.map((dayProps, i) => <CalendarDay {...dayProps} hoverHandler={hoverHandler} clickHandler={clickHandler} key={i}/>)}
             </div>
+
         </div>
     </div>
   )

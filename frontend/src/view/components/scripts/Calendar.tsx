@@ -81,11 +81,11 @@ function CalendarDay(
     { hoverHandler: (_:CustomDate) => void } &
     { clickHandler: (_:CustomDate) => void}
 ) {
-    const {period, day, isSelected, isSelectedFixed, hoverHandler, clickHandler} = props;
+    const {period, day, isSelected, hoverHandler, clickHandler} = props;
 
     return(
         <div
-            className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected || isSelectedFixed ? " selected" : ""}`}
+            className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected ? " selected" : ""}`}
             onMouseEnter={() => hoverHandler(day)}
             onClick={() => clickHandler(day)}
         >

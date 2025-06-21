@@ -4,8 +4,7 @@ import {z} from "zod"
 export type CalendarDayProps = {
     period: number | null,
     day: CustomDate,
-    isSelected: boolean,
-    isSelectedFixed: boolean
+    isSelected: boolean
 }
 
 export type LoginInfo = {

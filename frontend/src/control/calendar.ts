@@ -43,8 +43,7 @@ export function getDayProps(days: CustomDate[], data: PeriodData[], pivot: Custo
         const newProps: CalendarDayProps = {
             day,
             isSelected: selection && day.valueOf() >= selectionStart && day.valueOf() <= selectionEnd,
-            period: period ? period.id : null,
-            isSelectedFixed: false
+            period: period ? period.id : null
         }
 
         props.push(newProps);

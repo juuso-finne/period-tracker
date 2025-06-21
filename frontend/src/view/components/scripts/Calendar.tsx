@@ -1,6 +1,7 @@
 import { CustomDate, type CalendarDayProps, type PeriodData } from "../../../model/types";
 type Props = {
-    periodData: PeriodData[]
+    periodData: PeriodData[],
+    initialStart: CustomDate | null
 }
 
 import { useRef, useState, useMemo, useEffect} from "react";
@@ -8,13 +9,13 @@ import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
 
-    const {periodData} = props;
+    const {periodData, initialStart} = props;
 
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate|null>(null);
-    const [pivot, setPivot] = useState<CustomDate|null>(null);
-    const [openSelection, setOpenSelection] = useState<boolean>(false);
+    const [pivot, setPivot] = useState<CustomDate|null>(initialStart);
+    const [openSelection, setOpenSelection] = useState<boolean>(initialStart !== null);
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 
@@ -46,7 +47,7 @@ export default function Calendar(props: Props) {
 
     const monthSelector = useRef<HTMLSelectElement>(null);
     const yearSelector = useRef<HTMLInputElement>(null);
-    const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, null, null));
+    const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));
 
     useEffect(() =>{
         setPropArray(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));

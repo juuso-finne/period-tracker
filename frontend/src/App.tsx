@@ -35,7 +35,10 @@ function App() {
           <p>notes: {period.notes}</p>
         </div>
       )}
-      <Calendar periodData={data || []}/>
+      <Calendar
+        periodData={data || []}
+        initialStart={null}
+      />
     </>
   )
 }

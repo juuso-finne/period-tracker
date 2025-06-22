@@ -50,7 +50,10 @@ export default function Calendar(props: Props) {
     const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));
 
     useEffect(() =>{
-        setPropArray(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));
+        const selection = pivot !== null && hoverTarget !== null
+        const selectionStart = selection ? new CustomDate(Math.min(+hoverTarget!, +pivot!)) : null;
+        const selectionEnd = selection ? new CustomDate(Math.max(+hoverTarget!, +pivot!)) : null;
+        setPropArray(() => calendarUtils.getDayProps(days, periodData, selectionStart, selectionEnd));
     },[days, periodData, hoverTarget, pivot])
 
   return (

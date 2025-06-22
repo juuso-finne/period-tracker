@@ -1,7 +1,10 @@
 import { CustomDate, type CalendarDayProps, type PeriodData } from "../../../model/types";
 type Props = {
     periodData: PeriodData[],
-    initialStart: CustomDate | null
+    selectionStart: CustomDate | null,
+    selectionEnd: CustomDate | null,
+    setSelectionStart: React.Dispatch<React.SetStateAction<CustomDate | null>>,
+    setSelectionEnd: React.Dispatch<React.SetStateAction<CustomDate | null>>
 }
 
 import { useRef, useState, useMemo, useEffect} from "react";
@@ -9,13 +12,13 @@ import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
 
-    const {periodData, initialStart} = props;
+    const {periodData, selectionStart, selectionEnd, setSelectionEnd, setSelectionStart} = props;
 
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
-    const [hoverTarget, setHoverTarget] = useState<CustomDate|null>(null);
-    const [pivot, setPivot] = useState<CustomDate|null>(initialStart);
-    const [openSelection, setOpenSelection] = useState<boolean>(initialStart !== null);
+    const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(null);
+    const [pivot, setPivot] = useState<CustomDate | null>(selectionStart);
+    const [openSelection, setOpenSelection] = useState<boolean>(selectionStart !== null);
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 
@@ -35,9 +38,8 @@ export default function Calendar(props: Props) {
             setOpenSelection(false);
             return
         }
-        if (pivot && hoverTarget){
+        if (selectionStart && selectionEnd){
             setPivot(null);
-            setHoverTarget(null);
             return;
         }
 
@@ -49,12 +51,14 @@ export default function Calendar(props: Props) {
     const yearSelector = useRef<HTMLInputElement>(null);
     const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));
 
+    useEffect(()=>{
+            setSelectionStart(hoverTarget && pivot ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);
+            setSelectionEnd(hoverTarget && pivot ? new CustomDate(Math.max(+hoverTarget, +pivot)):null)
+    },[hoverTarget, pivot, setSelectionStart, setSelectionEnd])
+
     useEffect(() =>{
-        const selection = pivot !== null && hoverTarget !== null
-        const selectionStart = selection ? new CustomDate(Math.min(+hoverTarget!, +pivot!)) : null;
-        const selectionEnd = selection ? new CustomDate(Math.max(+hoverTarget!, +pivot!)) : null;
         setPropArray(() => calendarUtils.getDayProps(days, periodData, selectionStart, selectionEnd));
-    },[days, periodData, hoverTarget, pivot])
+    },[days, periodData, selectionStart, selectionEnd])
 
   return (
     <div className="flex flex-col items-center mx-2 md:mx-0">

@@ -4,10 +4,18 @@ import LoginRegisterPage from "./view/pages/LoginRegisterPage"
 import Calendar from "./view/components/scripts/Calendar";
 import { getPeriodData } from "./model/API/periodData"
 import { getCookie } from "./control/cookies";
+import { CustomDate } from "./model/types";
 
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
+  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(CustomDate.UTCFromValues(2025, 5, 4))
+  const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null)
+
+  useEffect(()=>{
+    console.log(`${selectionStart?.isoStringDateOnly()} - ${selectionEnd?.isoStringDateOnly()}`)
+  },[selectionEnd, selectionStart])
 
   const {isFetching, error, data} = useQuery({
     queryKey: ["getPeriodData"],
@@ -37,7 +45,10 @@ function App() {
       )}
       <Calendar
         periodData={data || []}
-        initialStart={null}
+        selectionStart={selectionStart}
+        setSelectionStart={setSelectionStart}
+        selectionEnd={selectionEnd}
+        setSelectionEnd={setSelectionEnd}
       />
     </>
   )

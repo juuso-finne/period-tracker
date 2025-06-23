@@ -1,12 +1,5 @@
 import{ CustomDate, type CalendarDayProps, type PeriodData } from "../model/types"
 
-export function changeMonth(setMonth: React.Dispatch<React.SetStateAction<number>>, selector: React.RefObject<HTMLSelectElement | null>){
-    setMonth(parseInt(selector.current?.value || "0"))
-}
-
-export function changeYear(setYear: React.Dispatch<React.SetStateAction<number>>, selector: React.RefObject<HTMLInputElement | null>){
-    setYear(parseInt(selector.current?.value || new Date().getFullYear().toString()))
-}
 export function getDays(month: number, year:number): CustomDate[]{
     const startDate = CustomDate.UTCFromValues(year, month, 1)
 

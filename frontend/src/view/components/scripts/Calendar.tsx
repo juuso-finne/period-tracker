@@ -7,7 +7,7 @@ type Props = {
     setSelectionEnd: React.Dispatch<React.SetStateAction<CustomDate | null>>
 }
 
-import { useRef, useState, useMemo, useEffect} from "react";
+import { useState, useMemo, useEffect} from "react";
 import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
@@ -47,28 +47,25 @@ export default function Calendar(props: Props) {
         setPivot(d);
     }
 
-    const monthSelector = useRef<HTMLSelectElement>(null);
-    const yearSelector = useRef<HTMLInputElement>(null);
-    const [propArray, setPropArray] = useState(() => calendarUtils.getDayProps(days, periodData, pivot, hoverTarget));
-
     useEffect(()=>{
             setSelectionStart(hoverTarget && pivot ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);
             setSelectionEnd(hoverTarget && pivot ? new CustomDate(Math.max(+hoverTarget, +pivot)):null)
     },[hoverTarget, pivot, setSelectionStart, setSelectionEnd])
 
-    useEffect(() =>{
-        setPropArray(() => calendarUtils.getDayProps(days, periodData, selectionStart, selectionEnd));
-    },[days, periodData, selectionStart, selectionEnd])
+    const propArray = useMemo(
+    () => calendarUtils.getDayProps(days, periodData, selectionStart, selectionEnd),
+    [days, periodData, selectionStart, selectionEnd]
+    );
 
   return (
     <div className="flex flex-col items-center mx-2 md:mx-0">
         <div className=" w-full md:w-3/4 ">
 
             <div className="flex justify-center">
-                <select className="border" ref={monthSelector} onChange={() => calendarUtils.changeMonth(setMonth, monthSelector)} defaultValue={month}>
+                <select className="border" onChange={ e => setMonth(Number(e.target.value))} defaultValue={month}>
                     {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
                 </select>
-                <input className="border p-1" type="number" min="1900" max={new Date().getFullYear() + 5} ref={yearSelector} defaultValue={year} onChange={() => calendarUtils.changeYear(setYear, yearSelector)}/>
+                <input className="border p-1" type="number" min="1900" max={new Date().getFullYear() + 5} defaultValue={year} onChange={e => setYear(Number(e.target.value))}/>
             </div>
 
             <div className='grid grid-cols-7 border'>

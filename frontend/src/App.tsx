@@ -10,7 +10,7 @@ import { CustomDate } from "./model/types";
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(CustomDate.UTCFromValues(2025, 5, 4))
+  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null)
   const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null)
 
   useEffect(()=>{

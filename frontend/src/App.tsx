@@ -12,6 +12,11 @@ function App() {
 
   const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null)
   const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null)
+  const [singleSelection, setSingleselection ] = useState<CustomDate|null>(null)
+
+  useEffect(()=>{
+    console.log(singleSelection)
+  },[singleSelection])
 
   useEffect(()=>{
     console.log(`${selectionStart?.isoStringDateOnly()} - ${selectionEnd?.isoStringDateOnly()}`)
@@ -44,12 +49,19 @@ function App() {
         </div>
       )}
       <Calendar
+        mode = "RANGE"
         periodData={data || []}
         selectionStart={selectionStart}
         setSelectionStart={setSelectionStart}
         selectionEnd={selectionEnd}
         setSelectionEnd={setSelectionEnd}
       />
+
+      <Calendar
+        mode="SINGLE"
+        periodData={data || []}
+        setValue={setSingleselection}
+        />
     </>
   )
 }

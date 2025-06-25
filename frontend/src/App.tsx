@@ -6,13 +6,12 @@ import { getPeriodData } from "./model/API/periodData"
 import { getCookie } from "./control/cookies";
 import { CustomDate } from "./model/types";
 
-
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null)
   const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null)
-  const [singleSelection, setSingleselection ] = useState<CustomDate|null>(null)
+  const [singleSelection, setSingleselection ] = useState<{day: CustomDate, period: number | null}|null>(null)
 
   useEffect(()=>{
     console.log(singleSelection)
@@ -20,6 +19,9 @@ function App() {
 
   useEffect(()=>{
     console.log(`${selectionStart?.isoStringDateOnly()} - ${selectionEnd?.isoStringDateOnly()}`)
+    if (!selectionEnd || !selectionStart)
+      return
+    console.log(CustomDate.todayAsUTC().isBetween(selectionStart, selectionEnd))
   },[selectionEnd, selectionStart])
 
   const {isFetching, error, data} = useQuery({

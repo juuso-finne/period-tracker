@@ -13,7 +13,7 @@ type RangeProps = BaseProps & {
 
 type SingleProps = BaseProps & {
     mode: "SINGLE",
-    setValue: React.Dispatch<React.SetStateAction<CustomDate | null>>
+    setValue: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number| null} | null>>
 }
 
 type Props = SingleProps | RangeProps
@@ -54,9 +54,9 @@ export default function Calendar(props: Props) {
         }
     }
 
-    const clickHandler = (d:CustomDate) => {
+    const clickHandler = (dayProps: CalendarDayProps) => {
         if (mode === "SINGLE"){
-            setValue(d);
+            setValue({day: dayProps.day, period: dayProps.period});
             return
         }
         if (openSelection){
@@ -69,7 +69,7 @@ export default function Calendar(props: Props) {
         }
 
         setOpenSelection(true);
-        setPivot(d);
+        setPivot(dayProps.day);
     }
 
     useEffect(()=>{
@@ -114,7 +114,7 @@ export default function Calendar(props: Props) {
 function CalendarDay(
     props: CalendarDayProps &
     { hoverHandler: (_:CustomDate) => void } &
-    { clickHandler: (_:CustomDate) => void}
+    { clickHandler: (_:CalendarDayProps) => void}
 ) {
     const {period, day, isSelected, hoverHandler, clickHandler} = props;
 
@@ -122,7 +122,7 @@ function CalendarDay(
         <div
             className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected ? " selected" : ""}`}
             onMouseEnter={() => hoverHandler(day)}
-            onClick={() => clickHandler(day)}
+            onClick={() => clickHandler(props)}
         >
             {day.getUTCDate()}
             {period ? <img className="size-5 absolute top-[0%] right-[0%] md:top-2 md:right-5" src="http://localhost:5000/images/blood_icon.png"/> : null}

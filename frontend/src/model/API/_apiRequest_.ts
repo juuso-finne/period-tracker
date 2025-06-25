@@ -1,4 +1,5 @@
 import constructHeaders from "../constructHeaders";
+import { AuthError } from "../types";
 type Method = "GET" | "POST" | "PUT" | "DELETE"
 
     const apiRequest = async (method: Method, routeURL: string, body?: string): Promise<Response> => {
@@ -15,6 +16,9 @@ type Method = "GET" | "POST" | "PUT" | "DELETE"
 
     if (!response.ok){
         const errorText = await response.text();
+        if(response.status === 401){
+            throw new AuthError(errorText);
+        }
         throw new Error(errorText);
     }
 

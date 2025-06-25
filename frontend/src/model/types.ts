@@ -38,3 +38,10 @@ export class CustomDate extends Date{
         return this.UTCFromValues(today.getFullYear(), today.getMonth(), today.getDate());
     }
 }
+
+export class AuthError extends Error {
+    constructor(message: string){
+        super(message);
+        this.name = "authError";
+    }
+}

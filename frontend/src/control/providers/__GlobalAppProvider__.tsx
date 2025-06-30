@@ -1,11 +1,12 @@
-import type { PropsWithChildren } from "react"
+
 import QueryClientProv from "./QueryClientProv"
+import RouterProv from "./RouterProv"
 
 
-const __GlobalAppProvider__ = ({children}: PropsWithChildren) => {
+const __GlobalAppProvider__ = () => {
   return (
       <QueryClientProv>
-              {children}
+        <RouterProv/>
       </QueryClientProv>
   )
 }

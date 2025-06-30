@@ -16,8 +16,8 @@ export type PeriodData = z.infer<typeof schemas.periodSchema>
 export type Settings = z.infer<typeof schemas.settingsSchema>
 export class CustomDate extends Date{
 
-    isBetween(start: Date, end: Date): boolean{
-        return this >= start && this <= end;
+    isBetween(a: Date, b: Date): boolean{
+        return +this >= Math.min(+a, +b) && +this <= Math.max(+a, +b);
     }
 
     differenceInDays(other: Date): number{

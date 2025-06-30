@@ -1,6 +1,8 @@
 import { CustomDate, type CalendarDayProps, type PeriodData } from "../../../model/types";
 type BaseProps = {
     periodData: PeriodData[],
+    initialMonth?: number,
+    initialYear?: number
 }
 
 type RangeProps = BaseProps & {
@@ -33,10 +35,10 @@ export default function Calendar(props: Props) {
         setSelectionEnd: props.mode === "RANGE" ? props.setSelectionEnd : () => {},
         setValue: props.mode === "SINGLE" ? props.setValue : () => {}
     }
-    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue} = combinedProps;
+    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear} = combinedProps;
 
-    const [month, setMonth] = useState<number>(new Date().getMonth());
-    const [year, setYear] = useState<number>(new Date().getFullYear());
+    const [month, setMonth] = useState<number>(initialMonth || new Date().getMonth());
+    const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(null);
     const [pivot, setPivot] = useState<CustomDate | null>(selectionStart);
     const [openSelection, setOpenSelection] = useState<boolean>(selectionStart !== null);

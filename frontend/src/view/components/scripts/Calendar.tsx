@@ -41,7 +41,7 @@ export default function Calendar(props: Props) {
 
     const [month, setMonth] = useState<number>(initialMonth || new Date().getMonth());
     const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
-    const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(null);
+    const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionEnd);
     const [pivot, setPivot] = useState<CustomDate | null>(selectionStart);
     const [openSelection, setOpenSelection] = useState<boolean>(selectionStart !== null);
 
@@ -69,14 +69,9 @@ export default function Calendar(props: Props) {
             setHoverTarget(dayProps.day);
             return
         }
-        if (selectionStart && selectionEnd){
-            setPivot(null);
-            setHoverTarget(null);
-            return;
-        }
-
         setOpenSelection(true);
         setPivot(dayProps.day);
+        setHoverTarget(null);
     }
 
     useEffect(()=>{

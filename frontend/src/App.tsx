@@ -63,6 +63,7 @@ function App() {
         mode="SINGLE"
         periodData={data || []}
         setValue={setSingleselection}
+        value={singleSelection}
         />
     </>
   )

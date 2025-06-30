@@ -15,6 +15,7 @@ type RangeProps = BaseProps & {
 
 type SingleProps = BaseProps & {
     mode: "SINGLE",
+    value: {day: CustomDate, period: number | null}|null,
     setValue: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number| null} | null>>
 }
 
@@ -33,6 +34,7 @@ export default function Calendar(props: Props) {
         selectionEnd: props.mode === "RANGE" ? props.selectionEnd : null,
         setSelectionStart: props.mode === "RANGE" ? props.setSelectionStart : () => {},
         setSelectionEnd: props.mode === "RANGE" ? props.setSelectionEnd : () => {},
+        value: props.mode === "SINGLE" ? props.value : null,
         setValue: props.mode === "SINGLE" ? props.setValue : () => {}
     }
     const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear} = combinedProps;
@@ -58,7 +60,8 @@ export default function Calendar(props: Props) {
 
     const clickHandler = (dayProps: CalendarDayProps) => {
         if (mode === "SINGLE"){
-            setValue({day: dayProps.day, period: dayProps.period});
+            const {day, period} = dayProps
+            setValue({day, period});
             return
         }
         if (openSelection){
@@ -87,8 +90,8 @@ export default function Calendar(props: Props) {
     () => calendarUtils.getDayProps(
         days,
         periodData,
-        props.mode ==="RANGE" ? props.selectionStart : null,
-        props.mode ==="RANGE" ? props.selectionEnd : null),
+        props.mode ==="RANGE" ? props.selectionStart : props.value?.day || null,
+        props.mode ==="RANGE" ? props.selectionEnd :  props.value?.day || null),
     [days, periodData, props]
     );
 

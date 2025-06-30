@@ -66,6 +66,7 @@ export default function Calendar(props: Props) {
         }
         if (openSelection){
             setOpenSelection(false);
+            setHoverTarget(dayProps.day);
             return
         }
         if (selectionStart && selectionEnd){

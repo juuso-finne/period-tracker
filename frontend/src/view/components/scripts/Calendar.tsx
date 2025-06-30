@@ -65,6 +65,7 @@ export default function Calendar(props: Props) {
         }
         if (selectionStart && selectionEnd){
             setPivot(null);
+            setHoverTarget(null);
             return;
         }
 
@@ -73,7 +74,9 @@ export default function Calendar(props: Props) {
     }
 
     useEffect(()=>{
-        if (mode === "SINGLE"){return;}
+        if (mode === "SINGLE"){
+            return;
+        }
         setSelectionStart(hoverTarget && pivot ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);
         setSelectionEnd(hoverTarget && pivot ? new CustomDate(Math.max(+hoverTarget, +pivot)):null)
     },[hoverTarget, pivot, mode, setSelectionEnd, setSelectionStart])

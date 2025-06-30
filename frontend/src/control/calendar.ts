@@ -21,7 +21,7 @@ export function getDays(month: number, year:number): CustomDate[]{
     return days
 }
 
-export function getDayProps(days: CustomDate[], data: PeriodData[], selectionStart: CustomDate|null, selectionEnd: CustomDate|null): CalendarDayProps[]{
+export function getDayProps(days: CustomDate[], data: PeriodData[], pivot: CustomDate|null, hoverTarget: CustomDate|null): CalendarDayProps[]{
     const props: CalendarDayProps[] = []
     const dataWithEnd = data.map( p => ({...p, end: p.end ? p.end : CustomDate.todayAsUTC()}));
     const eligibleData = dataWithEnd.filter(i => (i.end) >= days[0] && i.start <= days[days.length - 1]);
@@ -32,7 +32,7 @@ export function getDayProps(days: CustomDate[], data: PeriodData[], selectionSta
 
         const newProps: CalendarDayProps = {
             day,
-            isSelected: selectionStart && selectionEnd ? day >= selectionStart && day <= selectionEnd : false,
+            isSelected: pivot && hoverTarget ? day.isBetween(pivot, hoverTarget) : false,
             period: period ? period.id : null
         }
 

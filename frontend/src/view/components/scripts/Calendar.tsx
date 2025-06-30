@@ -82,17 +82,17 @@ export default function Calendar(props: Props) {
         if (mode === "SINGLE"){
             return;
         }
-        setSelectionStart(hoverTarget && pivot ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);
-        setSelectionEnd(hoverTarget && pivot ? new CustomDate(Math.max(+hoverTarget, +pivot)):null)
-    },[hoverTarget, pivot, mode, setSelectionEnd, setSelectionStart])
+        setSelectionStart(hoverTarget && pivot && !openSelection ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);
+        setSelectionEnd(hoverTarget && pivot && !openSelection ? new CustomDate(Math.max(+hoverTarget, +pivot)):null)
+    },[hoverTarget, pivot, mode, openSelection, setSelectionEnd, setSelectionStart])
 
     const propArray = useMemo(
     () => calendarUtils.getDayProps(
         days,
         periodData,
-        props.mode ==="RANGE" ? props.selectionStart : props.value?.day || null,
-        props.mode ==="RANGE" ? props.selectionEnd :  props.value?.day || null),
-    [days, periodData, props]
+        props.mode ==="RANGE" ? pivot : props.value?.day || null,
+        props.mode ==="RANGE" ? hoverTarget :  props.value?.day || null),
+    [days, periodData, props, pivot, hoverTarget]
     );
 
   return (

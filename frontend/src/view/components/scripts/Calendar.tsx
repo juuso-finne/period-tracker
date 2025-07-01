@@ -1,48 +1,29 @@
 import { CustomDate, type CalendarDayProps, type PeriodData } from "../../../model/types";
-type BaseProps = {
+type Mode = "RANGE" | "SINGLE"
+type Props = {
     periodData: PeriodData[],
     initialMonth?: number,
-    initialYear?: number
+    initialYear?: number,
+    mode?: Mode,
+    selectionStart?: CustomDate | null,
+    selectionEnd?: CustomDate | null,
+    setSelectionStart?: React.Dispatch<React.SetStateAction<CustomDate | null>>,
+    setSelectionEnd?: React.Dispatch<React.SetStateAction<CustomDate | null>>,
+    value?: {day: CustomDate, period: number | null}|null,
+    setValue?: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number | null} | null>>
 }
 
-type RangeProps = BaseProps & {
-    mode: "RANGE",
-    selectionStart: CustomDate | null,
-    selectionEnd: CustomDate | null,
-    setSelectionStart: React.Dispatch<React.SetStateAction<CustomDate | null>>,
-    setSelectionEnd: React.Dispatch<React.SetStateAction<CustomDate | null>>
-}
-
-type SingleProps = BaseProps & {
-    mode: "SINGLE",
-    value: {day: CustomDate, period: number | null}|null,
-    setValue: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number| null} | null>>
-}
-
-type Props = SingleProps | RangeProps
 
 import { useState, useMemo, useEffect} from "react";
 import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
-
-
-
-    const combinedProps = {
-        ...props,
-        selectionStart: props.mode === "RANGE" ? props.selectionStart : null,
-        selectionEnd: props.mode === "RANGE" ? props.selectionEnd : null,
-        setSelectionStart: props.mode === "RANGE" ? props.setSelectionStart : () => {},
-        setSelectionEnd: props.mode === "RANGE" ? props.setSelectionEnd : () => {},
-        value: props.mode === "SINGLE" ? props.value : null,
-        setValue: props.mode === "SINGLE" ? props.setValue : () => {}
-    }
-    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear} = combinedProps;
+    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear} = props;
 
     const [month, setMonth] = useState<number>(initialMonth || new Date().getMonth());
     const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
-    const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionEnd);
-    const [pivot, setPivot] = useState<CustomDate | null>(selectionStart);
+    const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionEnd || null);
+    const [pivot, setPivot] = useState<CustomDate | null>(selectionStart || null);
     const [openSelection, setOpenSelection] = useState<boolean>(selectionStart !== null);
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
@@ -59,7 +40,7 @@ export default function Calendar(props: Props) {
     }
 
     const clickHandler = (dayProps: CalendarDayProps) => {
-        if (mode === "SINGLE"){
+        if (mode === "SINGLE" && setValue){
             const {day, period} = dayProps
             setValue({day, period});
             return
@@ -75,7 +56,7 @@ export default function Calendar(props: Props) {
     }
 
     useEffect(()=>{
-        if (mode === "SINGLE"){
+        if (mode === "SINGLE" || !setSelectionEnd || !setSelectionStart){
             return;
         }
         setSelectionStart(hoverTarget && pivot && !openSelection ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);

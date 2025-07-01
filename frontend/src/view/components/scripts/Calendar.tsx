@@ -24,7 +24,7 @@ export default function Calendar(props: Props) {
     const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionEnd || null);
     const [pivot, setPivot] = useState<CustomDate | null>(selectionStart || null);
-    const [openSelection, setOpenSelection] = useState<boolean>(selectionStart !== null);
+    const [openSelection, setOpenSelection] = useState<boolean>((selectionStart !== null) != (selectionEnd !== null));
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 

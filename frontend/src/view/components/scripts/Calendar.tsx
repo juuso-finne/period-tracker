@@ -40,18 +40,18 @@ export default function Calendar(props: Props) {
     }
 
     const clickHandler = (dayProps: CalendarDayProps) => {
+        const {day, period} = dayProps
         if (mode === "SINGLE" && setValue){
-            const {day, period} = dayProps
             setValue({day, period});
             return
         }
         if (openSelection){
             setOpenSelection(false);
-            setHoverTarget(dayProps.day);
+            setHoverTarget(day);
             return
         }
         setOpenSelection(true);
-        setPivot(dayProps.day);
+        setPivot(day);
         setHoverTarget(null);
     }
 

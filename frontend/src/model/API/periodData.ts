@@ -9,8 +9,8 @@ export const getPeriodData = async (): Promise<PeriodData[]> => {
 
 export const postPeriodData = async (data: PeriodData):Promise<Response> => {
     try {
-        const formatteData = formatData(data);
-        return apiRequest("POST", "/data/", JSON.stringify(formatteData));
+        const formattedData = formatData(data);
+        return apiRequest("POST", "/data/", JSON.stringify(formattedData));
     } catch (error) {
         throw new Error(error instanceof Error ? error.message : String(error));
     }

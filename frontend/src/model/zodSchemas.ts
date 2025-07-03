@@ -2,7 +2,7 @@ import {z} from "zod"
 import { CustomDate } from "./types"
 
 export const periodSchema = z.object({
-    id: z.number(),
+    id: z.nullable(z.number()),
     start: z.string().transform(a => new CustomDate(a)),
     end: z.nullable(z.string().transform(a => new CustomDate(a))),
     notes: z.string()

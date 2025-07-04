@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { skipToken, useQuery } from "@tanstack/react-query"
-import LoginRegisterPage from "../pages/LoginRegisterPage"
 import Calendar from "../components/scripts/Calendar";
 import { getPeriodData } from "../../model/API/periodData"
-import { getCookie } from "../../control/cookies";
+import { getCookie, deleteCookie } from "../../control/cookies";
 import { CustomDate, AuthError } from "../../model/types";
 
 function HomePage() {
@@ -37,10 +37,22 @@ function HomePage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (error && error instanceof AuthError){
+      setLoggedIn(false);
+      deleteCookie("username");
+    }
+  }, [error])
+
+  if (!loggedIn){
+    return(<div>
+      <p>Please <Link to={"login"}>log in or register</Link></p>
+    </div>)
+  }
+
   return (
     <>
       <h1 className="text-red-400">Period tracker</h1>
-      <LoginRegisterPage />
       {isFetching ? <p>Loading...</p> : <></>}
       {error ? <p>{error instanceof AuthError ? "Expired session" : error.message}</p> : <></>}
       {(data || []).map((period) =>
@@ -51,6 +63,7 @@ function HomePage() {
           <p>notes: {period.notes}</p>
         </div>
       )}
+      <div>Welcome, {getCookie("username")}!</div>
       <Calendar
         mode = "RANGE"
         periodData={data || []}

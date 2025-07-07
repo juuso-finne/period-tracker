@@ -4,7 +4,7 @@ type Props = {
     periodData: PeriodData[],
     initialMonth?: number,
     initialYear?: number,
-    mode?: Mode,
+    mode: Mode,
     selectionStart?: CustomDate | null,
     selectionEnd?: CustomDate | null,
     setSelectionStart?: React.Dispatch<React.SetStateAction<CustomDate | null>>,

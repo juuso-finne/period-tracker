@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
 import { useLoginMutation, useRegisterMutation } from "../../control/mutations/userMutations";
 import LoginRegisterForm from "../components/scripts/LoginRegisterForm"
 import type { LoginInfo } from "../../model/types";
@@ -8,27 +7,23 @@ export default function LoginRegisterPage() {
     const [existingUser, setExistingUser] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const navigate = useNavigate();
-
     const errorHandler = (error: Error) => {
         setErrorMessage(error.message);
     }
 
     const loginSuccess = () => {
-        navigate("/");
-        setErrorMessage("");
+        window.location.href = "/";
     }
 
     const registerSuccess = () => {
-        navigate("/");
-        setErrorMessage("");
+        window.location.href = "/";
     }
 
     const loginMutation = useLoginMutation(loginSuccess, errorHandler);
     const registerMutation = useRegisterMutation(registerSuccess, errorHandler);
 
     const loginFunction = (userData: LoginInfo) => {
-        loginMutation.mutate(userData)
+        loginMutation.mutate(userData);
     }
 
     const registerFunction = (userData: LoginInfo) => {

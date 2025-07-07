@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 import { skipToken, useQuery } from "@tanstack/react-query"
 import Calendar from "../components/scripts/Calendar";
 import { getPeriodData } from "../../model/API/periodData"
-import { getCookie, deleteCookie } from "../../control/cookies";
+import { getCookie } from "../../control/cookies";
 import { CustomDate, AuthError } from "../../model/types";
 
 function HomePage() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null)
-  const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null)
-  const [singleSelection, setSingleselection ] = useState<{day: CustomDate, period: number | null}|null>(null)
+  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null);
+  const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null);
+  const [singleSelection, setSingleselection ] = useState<{day: CustomDate, period: number | null}|null>(null);
 
   useEffect(()=>{
     console.log(singleSelection)
@@ -30,19 +30,14 @@ function HomePage() {
   });
 
   useEffect(() => {
-    if (getCookie("username") !== ""){
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  }, [])
+    setLoggedIn(getCookie("username") !== "");
+  }, []);
 
   useEffect(() => {
     if (error && error instanceof AuthError){
       setLoggedIn(false);
-      deleteCookie("username");
     }
-  }, [error])
+  }, [error]);
 
   if (!loggedIn){
     return(<div>
@@ -54,7 +49,7 @@ function HomePage() {
     <>
       <h1 className="text-red-400">Period tracker</h1>
       {isFetching ? <p>Loading...</p> : <></>}
-      {error ? <p>{error instanceof AuthError ? "Expired session" : error.message}</p> : <></>}
+      {error ? <p>{error.message}</p> : <></>}
       {(data || []).map((period) =>
         <div key = {period.id} className="border-2 my-4 p-2 w-fit">
           <p>id: {period.id}</p>

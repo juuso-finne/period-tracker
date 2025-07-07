@@ -3,11 +3,13 @@ import { createBrowserRouter } from "react-router-dom"
 import HomePage from "../view/pages/HomePage"
 import LoginRegisterPage from "../view/pages/LoginRegisterPage"
 import RedirectPage from "../view/pages/RedirectPage"
+import NotFoundPage from "../view/pages/NotFoundPage"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage/>
+    element: <HomePage/>,
+    errorElement: <NotFoundPage/>
   },
 
   {

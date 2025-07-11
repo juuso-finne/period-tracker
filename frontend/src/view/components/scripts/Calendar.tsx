@@ -11,6 +11,8 @@ type Props = {
     setSelectionEnd?: React.Dispatch<React.SetStateAction<CustomDate | null>>,
     value?: {day: CustomDate, period: number | null}|null,
     setValue?: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number | null} | null>>
+    fixedStart?: boolean,
+    fixedEnd?: boolean
 }
 
 
@@ -18,12 +20,12 @@ import { useState, useMemo, useEffect} from "react";
 import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
-    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear} = props;
+    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear, fixedStart, fixedEnd} = props;
 
     const [month, setMonth] = useState<number>(initialMonth || new Date().getMonth());
     const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionEnd || null);
-    const [pivot, setPivot] = useState<CustomDate | null>(selectionStart || null);
+    const [pivot, setPivot] = useState<CustomDate | null>(() => calendarUtils.setInitialPivot(fixedStart || false, fixedEnd || false, selectionStart || null, selectionEnd || null));
     const [openSelection, setOpenSelection] = useState<boolean>((selectionStart !== null) != (selectionEnd !== null));
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
@@ -34,9 +36,21 @@ export default function Calendar(props: Props) {
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
     const hoverHandler = (d: CustomDate) => {
-        if (openSelection){
-            setHoverTarget(d);
+        if (!openSelection){
+            return;
         }
+
+        if (pivot && fixedStart && d < pivot){
+            setHoverTarget(pivot);
+            return
+        }
+
+        if (pivot && fixedEnd && d > pivot){
+            setHoverTarget(pivot);
+            return
+        }
+
+        setHoverTarget(d);
     }
 
     const clickHandler = (dayProps: CalendarDayProps) => {
@@ -45,14 +59,35 @@ export default function Calendar(props: Props) {
             setValue({day, period});
             return
         }
+
+        if (pivot && fixedEnd && day > pivot){
+            return;
+        }
+
+        if (pivot && fixedStart && day < pivot){
+            return;
+        }
+
         if (openSelection){
             setOpenSelection(false);
-            setHoverTarget(day);
             return
         }
         setOpenSelection(true);
+        setHoverTarget(null)
+
+        if (selectionEnd && fixedEnd){
+            setPivot(selectionEnd);
+            setHoverTarget(new CustomDate(Math.min(+day, +pivot!)));
+            return;
+        }
+
+        if (selectionStart && fixedStart){
+            setPivot(selectionStart);
+            setHoverTarget(new CustomDate(Math.max(+day, +pivot!)));
+            return;
+        }
+
         setPivot(day);
-        setHoverTarget(null);
     }
 
     useEffect(()=>{

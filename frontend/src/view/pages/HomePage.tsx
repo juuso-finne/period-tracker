@@ -18,9 +18,10 @@ function HomePage() {
   },[singleSelection])
 
   useEffect(()=>{
-    console.log(`${selectionStart?.isoStringDateOnly()} - ${selectionEnd?.isoStringDateOnly()}`)
     if (!selectionEnd || !selectionStart)
       return
+    console.log(`${selectionStart?.isoStringDateOnly()} - ${selectionEnd?.isoStringDateOnly()}`)
+
     console.log(CustomDate.todayAsUTC().isBetween(selectionStart, selectionEnd))
   },[selectionEnd, selectionStart])
 

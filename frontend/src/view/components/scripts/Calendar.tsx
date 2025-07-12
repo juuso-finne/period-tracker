@@ -11,12 +11,12 @@ type Props = {
     setSelectionEnd?: React.Dispatch<React.SetStateAction<CustomDate | null>>,
     value?: {day: CustomDate, period: number | null}|null,
     setValue?: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number | null} | null>>
-    fixedStart?: boolean,
-    fixedEnd?: boolean
+    fixedStart?: CustomDate | null,
+    fixedEnd?: CustomDate | null
 }
 
 
-import { useState, useMemo, useEffect} from "react";
+import { useState, useMemo, useEffect, useRef} from "react";
 import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
@@ -25,8 +25,8 @@ export default function Calendar(props: Props) {
     const [month, setMonth] = useState<number>(initialMonth || new Date().getMonth());
     const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionEnd || null);
-    const [pivot, setPivot] = useState<CustomDate | null>(() => calendarUtils.setInitialPivot(fixedStart || false, fixedEnd || false, selectionStart || null, selectionEnd || null));
-    const [openSelection, setOpenSelection] = useState<boolean>((selectionStart !== null) != (selectionEnd !== null));
+    const [pivot, setPivot] = useState<CustomDate | null>(() => calendarUtils.setInitialPivot(fixedStart || null, fixedEnd || null, selectionStart || null, selectionEnd || null));
+    const [openSelection, setOpenSelection] = useState<boolean>((selectionStart !== null) != (selectionEnd !== null) || !!fixedStart || !!fixedEnd);
 
     const days = useMemo(() => calendarUtils.getDays(month, year),[month, year])
 
@@ -60,6 +60,10 @@ export default function Calendar(props: Props) {
             return
         }
 
+        if (!setSelectionEnd || !setSelectionStart){
+            return;
+        }
+
         if (pivot && fixedEnd && day > pivot){
             return;
         }
@@ -68,21 +72,24 @@ export default function Calendar(props: Props) {
             return;
         }
 
-        if (openSelection){
+        if (openSelection && pivot){
             setOpenSelection(false);
+            setSelectionStart(new CustomDate(Math.min(+day, +pivot)));
+            setSelectionEnd(new CustomDate(Math.max(+day, +pivot)));
             return
         }
+
         setOpenSelection(true);
         setHoverTarget(null)
 
-        if (selectionEnd && fixedEnd){
-            setPivot(selectionEnd);
+        if (fixedEnd){
+            setPivot(fixedEnd);
             setHoverTarget(new CustomDate(Math.min(+day, +pivot!)));
             return;
         }
 
-        if (selectionStart && fixedStart){
-            setPivot(selectionStart);
+        if (fixedStart){
+            setPivot(fixedStart);
             setHoverTarget(new CustomDate(Math.max(+day, +pivot!)));
             return;
         }
@@ -90,13 +97,70 @@ export default function Calendar(props: Props) {
         setPivot(day);
     }
 
+    // Add refs to always have the latest value
+    const hoverTargetRef = useRef(hoverTarget);
+    const pivotRef = useRef(pivot);
+
+    useEffect(() => {
+        hoverTargetRef.current = hoverTarget;
+    }, [hoverTarget]);
+    useEffect(() => {
+        pivotRef.current = pivot;
+    }, [pivot]);
+
     useEffect(()=>{
-        if (mode === "SINGLE" || !setSelectionEnd || !setSelectionStart){
+
+        if(!setSelectionEnd || !setSelectionStart || (!fixedEnd && !fixedStart)){
             return;
         }
-        setSelectionStart(hoverTarget && pivot && !openSelection ? new CustomDate(Math.min(+hoverTarget, +pivot)): null);
-        setSelectionEnd(hoverTarget && pivot && !openSelection ? new CustomDate(Math.max(+hoverTarget, +pivot)):null)
-    },[hoverTarget, pivot, mode, openSelection, setSelectionEnd, setSelectionStart])
+
+        if (!(!!hoverTargetRef.current || !!pivotRef.current)){
+            setOpenSelection(true);
+        }
+
+        if (fixedEnd){
+            setHoverTarget( () => {
+                if(!hoverTargetRef.current && !pivotRef.current){
+                    return fixedEnd;
+                }
+
+                let oldEnd = null;
+
+                if (hoverTargetRef.current && pivotRef.current){
+                    oldEnd = new CustomDate(Math.min(+hoverTargetRef.current, +pivotRef.current));
+                } else{
+                    oldEnd = hoverTargetRef.current || pivotRef.current;
+                }
+
+                return oldEnd ? new CustomDate(Math.min(+oldEnd, +fixedEnd)) : oldEnd;
+            });
+            setSelectionEnd(fixedEnd);
+            setPivot(fixedEnd);
+        }
+
+        if (fixedStart){
+            setHoverTarget( () => {
+                if(!hoverTargetRef.current && !pivotRef.current){
+                    return fixedStart;
+                }
+
+                let oldStart = null;
+
+                if (hoverTargetRef.current && pivotRef.current){
+                    oldStart = new CustomDate(Math.max(+hoverTargetRef.current, +pivotRef.current));
+                } else{
+                    oldStart = hoverTargetRef.current || pivotRef.current;
+                }
+
+                return oldStart ? new CustomDate(Math.max(+oldStart, +fixedStart)) : oldStart;
+            });
+            setSelectionStart(fixedStart);
+            setPivot(fixedStart);
+        }
+
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[fixedEnd, fixedStart])
 
     const propArray = useMemo(
     () => calendarUtils.getDayProps(

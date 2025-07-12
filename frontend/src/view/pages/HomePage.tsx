@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { skipToken, useQuery } from "@tanstack/react-query"
 import Calendar from "../components/scripts/Calendar";
@@ -12,10 +12,17 @@ function HomePage() {
   const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null);
   const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null);
   const [singleSelection, setSingleselection ] = useState<{day: CustomDate, period: number | null}|null>(null);
+  const [currentPeriod, setCurrentPeriod] = useState<boolean>(true)
 
   useEffect(()=>{
     console.log(singleSelection)
   },[singleSelection])
+
+  useEffect(()=>{
+    if(currentPeriod){
+      setSelectionEnd(CustomDate.todayAsUTC());
+    }
+  },[currentPeriod])
 
   useEffect(()=>{
     if (!selectionEnd || !selectionStart)
@@ -40,11 +47,18 @@ function HomePage() {
     }
   }, [error]);
 
+  const memoizedFixedEnd = useMemo(
+  () => (currentPeriod ? CustomDate.todayAsUTC() : null),
+  [currentPeriod]
+);
+
   if (!loggedIn){
     return(<div>
       <p>Please <Link to={"login"}>log in or register</Link></p>
     </div>)
   }
+
+
 
   return (
     <>
@@ -60,6 +74,11 @@ function HomePage() {
         </div>
       )}
       <div>Welcome, {getCookie("username")}!</div>
+      <div>I'm currently on this period</div>
+      <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} defaultChecked={currentPeriod}/>
+      <div>Selection start: {selectionStart?.isoStringDateOnly()}</div>
+      <div>Selection end: {selectionEnd?.isoStringDateOnly()}</div>
+
       <Calendar
         mode = "RANGE"
         periodData={data || []}
@@ -67,6 +86,7 @@ function HomePage() {
         setSelectionStart={setSelectionStart}
         selectionEnd={selectionEnd}
         setSelectionEnd={setSelectionEnd}
+        fixedEnd={memoizedFixedEnd}
       />
 
       <Calendar

@@ -41,11 +41,20 @@ export function getDayProps(days: CustomDate[], data: PeriodData[], pivot: Custo
     return props;
 }
 
-export function setInitialPivot(fixedStart: boolean, fixedEnd: boolean, selectionStart: CustomDate | null, selectionEnd: CustomDate | null){
-    if (fixedStart && selectionStart){
+export function setInitialPivot(fixedStart: CustomDate | null, fixedEnd: CustomDate | null, selectionStart: CustomDate | null, selectionEnd: CustomDate | null){
+    if (fixedStart){
+        return fixedStart;
+    }
+    if (fixedEnd){
+        return fixedEnd;
+    }
+    if (selectionStart && selectionEnd){
+        return null;
+    }
+    if (selectionStart){
         return selectionStart;
     }
-    if (fixedEnd && selectionEnd){
+    if (selectionEnd){
         return selectionEnd;
     }
     return null;

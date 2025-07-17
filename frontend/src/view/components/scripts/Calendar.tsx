@@ -80,17 +80,22 @@ export default function Calendar(props: Props) {
         }
 
         setOpenSelection(true);
-        setHoverTarget(null)
+        setHoverTarget(null);
+        setSelectionEnd(null);
+        setSelectionStart(null);;
 
         if (fixedEnd){
             setPivot(fixedEnd);
             setHoverTarget(new CustomDate(Math.min(+day, +pivot!)));
+            setSelectionEnd(fixedEnd);
             return;
         }
+
 
         if (fixedStart){
             setPivot(fixedStart);
             setHoverTarget(new CustomDate(Math.max(+day, +pivot!)));
+            setSelectionStart(fixedStart);
             return;
         }
 

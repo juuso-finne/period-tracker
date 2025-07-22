@@ -102,7 +102,6 @@ export default function Calendar(props: Props) {
         setPivot(day);
     }
 
-    // Add refs to always have the latest value
     const hoverTargetRef = useRef(hoverTarget);
     const pivotRef = useRef(pivot);
 
@@ -139,6 +138,13 @@ export default function Calendar(props: Props) {
 
                 return oldEnd ? new CustomDate(Math.min(+oldEnd, +fixedEnd)) : oldEnd;
             });
+            setSelectionStart((prev) => {
+                if (!prev){
+                    return null
+                }
+
+                return new CustomDate(Math.min(+prev, +fixedEnd));
+            });
             setSelectionEnd(fixedEnd);
             setPivot(fixedEnd);
         }
@@ -158,6 +164,13 @@ export default function Calendar(props: Props) {
                 }
 
                 return oldStart ? new CustomDate(Math.max(+oldStart, +fixedStart)) : oldStart;
+            });
+            setSelectionEnd((prev) => {
+                if (!prev){
+                    return null
+                }
+
+                return new CustomDate(Math.max(+prev, +fixedStart));
             });
             setSelectionStart(fixedStart);
             setPivot(fixedStart);

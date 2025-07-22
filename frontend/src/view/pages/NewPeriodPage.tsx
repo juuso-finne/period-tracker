@@ -3,6 +3,7 @@ import { getPeriodData } from "../../model/API/periodData"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { AuthError, CustomDate } from "../../model/types";
+import { usePostPeriodMutation } from "../../control/mutations/periodDataMutations";
 import validate from "../../control/validation";
 import Calendar from "../components/scripts/Calendar";
 
@@ -13,7 +14,7 @@ export default function NewPeriodPage() {
         queryFn: getPeriodData
     });
 
-    const [searchParams, _] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null);
     const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null);
@@ -48,11 +49,27 @@ export default function NewPeriodPage() {
         const {message, isValid} = validate({id:null, start:selectionStart, end:selectionEnd, notes:""}, data || []);
         setErrorText(message);
         setValidSubmission(isValid);
-    }, [selectionStart, selectionEnd, currentPeriod, data])
+    }, [selectionStart, selectionEnd, currentPeriod, data]);
+
+    const submissionSuccess = () => {
+        navigate("/");
+    }
+
+    const submissionFail = (error: Error) =>{
+        if (error instanceof AuthError){
+            navigate("/redirect");
+        }else{
+            setErrorText(error.message);
+        }
+    }
+
+    const mutation = usePostPeriodMutation(submissionSuccess, submissionFail);
 
     if (isFetching){
         return(<div>Loading...</div>)
     }
+
+
 
     return (
     <>
@@ -81,7 +98,11 @@ export default function NewPeriodPage() {
             <button
                 className="btn-primary"
                 disabled={!validSubmission}
-                onClick={() => {console.log({id: null, start: selectionStart, end: selectionEnd, notes})}}
+                onClick={() => {mutation.mutate({
+                    id: null,
+                    start: selectionStart!,
+                    end: currentPeriod ? null : selectionEnd,
+                    notes})}}
             >
                 Submit
             </button>

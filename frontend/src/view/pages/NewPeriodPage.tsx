@@ -3,6 +3,7 @@ import { getPeriodData } from "../../model/API/periodData"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { AuthError, CustomDate } from "../../model/types";
+import validate from "../../control/validation";
 import Calendar from "../components/scripts/Calendar";
 
 export default function NewPeriodPage() {
@@ -19,20 +20,35 @@ export default function NewPeriodPage() {
     const [currentPeriod, setCurrentPeriod] = useState<boolean>(searchParams.get("current") === "true");
     const [errorText, setErrorText] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
+    const [validSubmission, setValidSubmission] = useState<boolean>(false);
 
     const memoizedFixedEnd = useMemo(
     () => (currentPeriod ? CustomDate.todayAsUTC() : null),
     [currentPeriod]);
 
-    useEffect(()=>{
-        console.log(notes);
-    },[notes])
-
     useEffect(() => {
-    if (error && error instanceof AuthError){
+    if (!error){
+        setErrorText("");
+        return;
+    }
+    if (error instanceof AuthError){
         navigate("/redirect");
+    }else{
+        setErrorText(error.message)
     }
     }, [error, navigate]);
+
+    useEffect(() =>{
+        if (!selectionStart || (!selectionEnd && !currentPeriod)){
+            setErrorText("Please select a start date and an end date.");
+            setValidSubmission(false);
+            return;
+        }
+
+        const {message, isValid} = validate({id:null, start:selectionStart, end:selectionEnd, notes:""}, data || []);
+        setErrorText(message);
+        setValidSubmission(isValid);
+    }, [selectionStart, selectionEnd, currentPeriod, data])
 
     if (isFetching){
         return(<div>Loading...</div>)
@@ -40,22 +56,37 @@ export default function NewPeriodPage() {
 
     return (
     <>
-        {error ? <p>{error.message}</p> : <></>}
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>End date: {selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>Notes:</div>
         <textarea onChange={e => setNotes(e.target.value)}/>
-        <div>I'm currently on this period</div>
-        <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} defaultChecked={currentPeriod}/>
-            <Calendar
-            mode = "RANGE"
-            periodData={data || []}
-            selectionStart={selectionStart}
-            setSelectionStart={setSelectionStart}
-            selectionEnd={selectionEnd}
-            setSelectionEnd={setSelectionEnd}
-            fixedEnd={memoizedFixedEnd}
-            />
+        <div className="flex gap-2">
+            <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} defaultChecked={currentPeriod}/>
+            <p>I'm currently on this period</p>
+        </div>
+
+        <div>{errorText}</div>
+
+        <Calendar
+        mode = "RANGE"
+        periodData={data || []}
+        selectionStart={selectionStart}
+        setSelectionStart={setSelectionStart}
+        selectionEnd={selectionEnd}
+        setSelectionEnd={setSelectionEnd}
+        fixedEnd={memoizedFixedEnd}
+        />
+
+        <div className="flex justify-center gap-5">
+            <button
+                className="btn-primary"
+                disabled={!validSubmission}
+                onClick={() => {console.log({id: null, start: selectionStart, end: selectionEnd, notes})}}
+            >
+                Submit
+            </button>
+            <button className="btn-primary">Cancel</button>
+        </div>
     </>
     )
 }

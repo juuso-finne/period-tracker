@@ -4,6 +4,7 @@ import HomePage from "../view/pages/HomePage"
 import LoginRegisterPage from "../view/pages/LoginRegisterPage"
 import RedirectPage from "../view/pages/RedirectPage"
 import NotFoundPage from "../view/pages/NotFoundPage"
+import NewPeriodPage from "../view/pages/NewPeriodPage"
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
   {
     path: "redirect",
     element: <RedirectPage/>
+  },
+
+  {
+    path: "new",
+    element: <NewPeriodPage/>
   }
 ])
 

@@ -2,8 +2,6 @@ import { CustomDate, type CalendarDayProps, type PeriodData } from "../../../mod
 type Mode = "RANGE" | "SINGLE"
 type Props = {
     periodData: PeriodData[],
-    initialMonth?: number,
-    initialYear?: number,
     mode: Mode,
     selectionStart?: CustomDate | null,
     selectionEnd?: CustomDate | null,
@@ -20,10 +18,10 @@ import { useState, useMemo, useEffect, useRef} from "react";
 import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
-    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, initialMonth, initialYear, fixedStart, fixedEnd} = props;
+    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, fixedStart, fixedEnd} = props;
 
-    const [month, setMonth] = useState<number>(initialMonth || new Date().getMonth());
-    const [year, setYear] = useState<number>(initialYear || new Date().getFullYear());
+    const [month, setMonth] = useState<number>(selectionStart?.getMonth() || new Date().getMonth());
+    const [year, setYear] = useState<number>(selectionStart?.getFullYear() || new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionStart ? selectionEnd || null : null);
     const [pivot, setPivot] = useState<CustomDate | null>(() => calendarUtils.setInitialPivot(fixedStart || null, fixedEnd || null, selectionStart || null, selectionEnd || null));
     const [openSelection, setOpenSelection] = useState<boolean>((selectionStart !== null) != (selectionEnd !== null) || !!fixedStart || !!fixedEnd);

@@ -106,7 +106,7 @@ export default function NewPeriodPage() {
             >
                 Submit
             </button>
-            <button className="btn-primary">Cancel</button>
+            <button className="btn-primary" onClick={() => navigate(-1)}>Cancel</button>
         </div>
     </>
     )

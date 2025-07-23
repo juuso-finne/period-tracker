@@ -48,9 +48,6 @@ export function setInitialPivot(fixedStart: CustomDate | null, fixedEnd: CustomD
     if (fixedEnd){
         return fixedEnd;
     }
-    if (selectionStart && selectionEnd){
-        return null;
-    }
     if (selectionStart){
         return selectionStart;
     }

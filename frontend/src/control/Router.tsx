@@ -5,6 +5,7 @@ import LoginRegisterPage from "../view/pages/LoginRegisterPage"
 import RedirectPage from "../view/pages/RedirectPage"
 import NotFoundPage from "../view/pages/NotFoundPage"
 import NewPeriodPage from "../view/pages/NewPeriodPage"
+import EditPeriodPage from "../view/pages/EditPeriodPage"
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,11 @@ const router = createBrowserRouter([
   {
     path: "new",
     element: <NewPeriodPage/>
+  },
+
+  {
+    path: "editPeriod/:id",
+    element: <EditPeriodPage/>
   }
 ])
 

@@ -9,10 +9,10 @@ import { CustomDate, AuthError } from "../../model/types";
 function HomePage() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null);
-  const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null);
+  const [selectionStart, setSelectionStart] = useState<CustomDate|null>(new CustomDate(Date.UTC(2025, 6, 1)));
+  const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(CustomDate.todayAsUTC());
   const [singleSelection, setSingleselection ] = useState<{day: CustomDate, period: number | null}|null>(null);
-  const [currentPeriod, setCurrentPeriod] = useState<boolean>(true)
+  const [currentPeriod, setCurrentPeriod] = useState<boolean>(false)
 
   useEffect(()=>{
     console.log(singleSelection)

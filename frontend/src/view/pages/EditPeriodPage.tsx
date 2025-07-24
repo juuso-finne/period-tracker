@@ -11,7 +11,8 @@ export default function EditPeriodPage() {
     const navigate = useNavigate();
     const {isFetching, error, data} = useQuery({
         queryKey: ["getPeriodData"],
-        queryFn: getPeriodData
+        queryFn: getPeriodData,
+        refetchOnWindowFocus: false
     });
 
     const notesRef = useRef<HTMLTextAreaElement>(null)
@@ -73,10 +74,10 @@ export default function EditPeriodPage() {
             return;
         }
 
-        const {message, isValid} = validate({id:null, start:selectionStart, end:selectionEnd, notes:""}, data || []);
+        const {message, isValid} = validate({id:Number(params.id), start:selectionStart, end:selectionEnd, notes:""}, data || []);
         setErrorText(message);
         setValidSubmission(isValid);
-    }, [selectionStart, selectionEnd, currentPeriod, data]);
+    }, [selectionStart, selectionEnd, currentPeriod, data, params]);
 
     const editSuccess = () => {
         navigate("/");
@@ -112,7 +113,6 @@ export default function EditPeriodPage() {
         <div>{errorText}</div>
 
         <Calendar
-        key={`${selectionStart?.toString() ?? "null"}-${selectionEnd?.toString() ?? "null"}`}
         mode = "RANGE"
         periodData={data || []}
         selectionStart={selectionStart}
@@ -127,14 +127,14 @@ export default function EditPeriodPage() {
                 className="btn-primary"
                 disabled={!validSubmission}
                 onClick={() => {mutation.mutate({
-                    id: null,
+                    id: Number(params.id),
                     start: selectionStart!,
                     end: currentPeriod ? null : selectionEnd,
                     notes: notesRef.current?.value || ""})}}
             >
                 Save
             </button>
-            <button className="btn-primary" onClick={() => navigate(-1)}>Cancel</button>
+            <button className="btn-primary" onClick={() => navigate("/")}>Cancel</button>
         </div>
     </>
     )

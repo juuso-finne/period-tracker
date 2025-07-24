@@ -178,6 +178,16 @@ export default function Calendar(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[fixedEnd, fixedStart])
 
+    useEffect(() => {
+        if (mode === "RANGE" && selectionStart && selectionEnd) {
+            setPivot(selectionEnd);
+            setHoverTarget(selectionStart);
+            setYear(selectionStart.getFullYear());
+            setMonth(selectionStart.getMonth());
+            setOpenSelection(false);
+        }
+    }, [selectionStart, selectionEnd, mode]);
+
     const propArray = useMemo(
     () => calendarUtils.getDayProps(
         days,
@@ -192,10 +202,10 @@ export default function Calendar(props: Props) {
         <div className=" w-full md:w-3/4 ">
 
             <div className="flex justify-center">
-                <select className="border" onChange={ e => setMonth(Number(e.target.value))} defaultValue={month}>
+                <select className="border" onChange={ e => setMonth(Number(e.target.value))} value={month}>
                     {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
                 </select>
-                <input className="border p-1" type="number" min="1900" max={new Date().getFullYear() + 5} defaultValue={year} onChange={e => setYear(Number(e.target.value))}/>
+                <input className="border p-1" type="number" min="1900" max={new Date().getFullYear() + 5} value={year} onChange={e => setYear(Number(e.target.value))}/>
             </div>
 
             <div className='grid grid-cols-7 border'>

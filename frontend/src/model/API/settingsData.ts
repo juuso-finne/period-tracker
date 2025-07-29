@@ -2,9 +2,9 @@ import apiRequest from "./_apiRequest_";
 import { settingsSchema } from "../zodSchemas";
 import type { SettingsData } from "../types"
 
-export const getSettingsData = async (): Promise<SettingsData[]> => {
+export const getSettingsData = async (): Promise<SettingsData> => {
         const response = await apiRequest("GET", "/settings/");
-        return settingsSchema.array().parseAsync(await response.json());
+        return settingsSchema.parseAsync(await response.json());
 }
 
 export const putSettingsData = async (data: SettingsData):Promise<Response> => {

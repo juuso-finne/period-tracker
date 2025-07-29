@@ -10,7 +10,7 @@ export const periodSchema = z.object({
 
 export const settingsSchema = z.object({
     cycleLength: z.number().min(1),
-    pulsMinus: z.number().min(0),
+    plusMinus: z.number().min(0),
     useDefaults: z.boolean(),
     threshold: z.number().min(1)
 })

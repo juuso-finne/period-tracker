@@ -13,7 +13,7 @@ export type LoginInfo = {
 }
 
 export type PeriodData = z.infer<typeof schemas.periodSchema>
-export type Settings = z.infer<typeof schemas.settingsSchema>
+export type SettingsData = z.infer<typeof schemas.settingsSchema>
 export class CustomDate extends Date{
 
     isBetween(a: Date, b: Date): boolean{

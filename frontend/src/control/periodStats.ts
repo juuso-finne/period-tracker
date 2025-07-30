@@ -19,6 +19,9 @@ export function getCycleLengths(data: PeriodData[], min:number = 15, max: number
 }
 
 export function standardDeviation(array: number[]): number{
+    if (array.length < 2){
+        return 0;
+    }
     const meanValue = mean(array);
     const variance = array.reduce((a, b) => a + Math.pow(b - meanValue, 2), 0) / (array.length - 1);
     return Math.sqrt(variance);

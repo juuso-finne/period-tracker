@@ -37,6 +37,11 @@ export class CustomDate extends Date{
         const today = new Date();
         return this.UTCFromValues(today.getFullYear(), today.getMonth(), today.getDate());
     }
+
+    daysBeforeOrAfter(offset: number) : CustomDate{
+        const date = this.getDate();
+        return CustomDate.UTCFromValues(this.getFullYear(), this.getMonth(), date + offset);
+    }
 }
 
 export class AuthError extends Error {

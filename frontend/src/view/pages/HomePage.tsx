@@ -129,11 +129,11 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
   const latestPeriodStart = data[0].start;
   const parameters = {
     plusMinus: settings.plusMinus,
-    cycleLength: settings. cycleLength
+    cycleLength: settings.cycleLength
   }
 
   if (!settings.useDefaults && cycleLengths.length >= settings.threshold){
-    parameters.plusMinus = Math.round(stats.standardDeviation(cycleLengths));
+    parameters.plusMinus = Math.round(stats.standardDeviation(cycleLengths) * 2);
     parameters.cycleLength = Math.round(stats.mean(cycleLengths));
   }
 

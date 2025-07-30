@@ -4,7 +4,7 @@ export function mean(array: number[]): number{
    return array.reduce((a, b) => a + b)/array.length;
 }
 
-export function getCycleLengths(data: PeriodData[]): number[]{
+export function getCycleLengths(data: PeriodData[], min:number = 15, max: number = 45): number[]{
     const cycleLengths:number[] = [];
 
     for (let i = 0; i < data.length -1; i++){
@@ -15,7 +15,7 @@ export function getCycleLengths(data: PeriodData[]): number[]{
 
     }
 
-    return cycleLengths;
+    return cycleLengths.filter(i => i >= min && i <= max);
 }
 
 export function standardDeviation(array: number[]): number{

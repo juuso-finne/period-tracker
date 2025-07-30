@@ -22,9 +22,33 @@ export default function SettingsPage() {
 
     const [errorText, setErrorText] = useState<string>("");
     const [newSettings, setNewSettings] = useState<SettingsData>(emptySettings);
+    const [isValid, setIsValid] = useState<boolean>(false);
 
     const onSuccess = () => {setErrorText("Changes saved successfully")}
     const onError = (error: Error) => {setErrorText(error.message)}
+
+    useEffect(() => {
+        if (newSettings.cycleLength < 1){
+            setIsValid(false);
+            setErrorText("Cycle length must be at least 1");
+            return;
+        }
+
+        if (newSettings.plusMinus < 0){
+            setIsValid(false);
+            setErrorText("Plus minus must be at least 0");
+            return;
+        }
+
+        if (newSettings.threshold < 1){
+            setIsValid(false);
+            setErrorText("Threshold must be at least 1");
+            return;
+        }
+
+        setErrorText("");
+        setIsValid(true);
+    }, [newSettings])
 
     useEffect(() => {
     if (!error){
@@ -54,13 +78,13 @@ export default function SettingsPage() {
     <>
         <h1>Settings</h1>
         <p>{errorText}</p>
-        <SettingsForm settings={newSettings || emptySettings} setSettings={setNewSettings} onError={onError} onSuccess={onSuccess}/>
+        <SettingsForm settings={newSettings || emptySettings} setSettings={setNewSettings} onError={onError} onSuccess={onSuccess} isValid={isValid}/>
     </>
     )
 
 }
 
-function SettingsForm({settings, setSettings, onSuccess, onError}: {settings: SettingsData, setSettings: React.Dispatch<React.SetStateAction<SettingsData>>, onSuccess: () => void, onError: (error: Error) => void}) {
+function SettingsForm({settings, setSettings, onSuccess, onError, isValid}: {settings: SettingsData, setSettings: React.Dispatch<React.SetStateAction<SettingsData>>, onSuccess: () => void, onError: (error: Error) => void, isValid:boolean}) {
     const navigate = useNavigate();
     const mutation = usePutSettingsMutation(onSuccess, onError);
     const defaultSettings = {
@@ -89,7 +113,7 @@ function SettingsForm({settings, setSettings, onSuccess, onError}: {settings: Se
         </div>
 
         <div className="flex gap-2">
-            <button className="btn-primary" onClick={e => {e.preventDefault(); mutation.mutate(settings)}}>Save changes</button>
+            <button className="btn-primary" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
             <button className="btn-primary" onClick={e => {e.preventDefault(); setSettings(defaultSettings)}}>Restore defaults</button>
             <button className="btn-primary" onClick={e => {e.preventDefault(); navigate("/")}}>Cancel</button>
         </div>

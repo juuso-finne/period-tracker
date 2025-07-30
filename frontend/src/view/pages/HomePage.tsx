@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { skipToken, useQuery } from "@tanstack/react-query"
+import { skipToken, useQueries } from "@tanstack/react-query"
 import Calendar from "../components/scripts/Calendar";
 import { getPeriodData } from "../../model/API/periodData"
+import { getSettingsData } from "../../model/API/settingsData";
 import { getCookie } from "../../control/cookies";
-import { CustomDate, AuthError } from "../../model/types";
+import { CustomDate, AuthError, type PeriodData, type SettingsData } from "../../model/types";
+import * as stats from "../../control/periodStats"
 
 function HomePage() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -32,10 +34,23 @@ function HomePage() {
     console.log(CustomDate.todayAsUTC().isBetween(selectionStart, selectionEnd))
   },[selectionEnd, selectionStart])
 
-  const {isFetching, error, data} = useQuery({
-    queryKey: ["getPeriodData"],
-    queryFn: loggedIn ? getPeriodData : skipToken
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["getPeriodData"],
+        queryFn: loggedIn ? getPeriodData : skipToken
+      },
+      {
+        queryKey: ["getSettingsData"],
+        queryFn: loggedIn ? getSettingsData : skipToken
+      }
+    ]
   });
+
+  const isFetching = results.some(query => query.isFetching);
+  const error = results.find(query => query.error) ? results.find(query => query.error)?.error : null;
+  const data = results[0].data || [];
+  const settings = results[1].data || null;
 
   useEffect(() => {
     setLoggedIn(getCookie("username") !== "");
@@ -79,6 +94,8 @@ function HomePage() {
       <div>Selection start: {selectionStart?.isoStringDateOnly()}</div>
       <div>Selection end: {selectionEnd?.isoStringDateOnly()}</div>
 
+      <Prediction data={data} settings={settings}/>
+
       <Calendar
         mode = "RANGE"
         periodData={data || []}
@@ -96,6 +113,37 @@ function HomePage() {
         value={singleSelection}
         />
     </>
+  )
+}
+
+function Prediction({data, settings}: {data: PeriodData[], settings: SettingsData|null}){
+  if(!data || !settings){
+    return(<></>)
+  }
+
+  if (data.length === 0){
+    return(<p>No previous data to base a prediction on.</p>)
+  }
+
+  const cycleLengths = stats.getCycleLengths(data);
+  const latestPeriodStart = data[0].start;
+  const parameters = {
+    plusMinus: settings.plusMinus,
+    cycleLength: settings. cycleLength
+  }
+
+  if (!settings.useDefaults && cycleLengths.length >= settings.threshold){
+    parameters.plusMinus = Math.round(stats.standardDeviation(cycleLengths));
+    parameters.cycleLength = Math.round(stats.mean(cycleLengths));
+  }
+
+  const median = latestPeriodStart.daysBeforeOrAfter(parameters.cycleLength);
+  const earliest = median.daysBeforeOrAfter(parameters.plusMinus * -1);
+  const latest = median.daysBeforeOrAfter(parameters.plusMinus);
+  return(
+    <div>
+      <p>Your next period will likely start between {earliest.toLocaleDateString()} and {latest.toLocaleDateString()}</p>
+    </div>
   )
 }
 

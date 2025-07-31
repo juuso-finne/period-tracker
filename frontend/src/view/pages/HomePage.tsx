@@ -125,21 +125,7 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
     return(<p>No previous data to base a prediction on.</p>)
   }
 
-  const cycleLengths = stats.getCycleLengths(data);
-  const latestPeriodStart = data[0].start;
-  const parameters = {
-    plusMinus: settings.plusMinus,
-    cycleLength: settings.cycleLength
-  }
-
-  if (!settings.useDefaults && cycleLengths.length >= settings.threshold){
-    parameters.plusMinus = Math.round(stats.standardDeviation(cycleLengths) * 2);
-    parameters.cycleLength = Math.round(stats.mean(cycleLengths));
-  }
-
-  const median = latestPeriodStart.daysBeforeOrAfter(parameters.cycleLength);
-  const earliest = median.daysBeforeOrAfter(parameters.plusMinus * -1);
-  const latest = median.daysBeforeOrAfter(parameters.plusMinus);
+  const {earliest, latest} = stats.nextPeriod(data, settings);
   return(
     <div>
       <p>Your next period will likely start between {earliest.toLocaleDateString()} and {latest.toLocaleDateString()}</p>

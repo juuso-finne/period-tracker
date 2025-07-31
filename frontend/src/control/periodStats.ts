@@ -1,4 +1,4 @@
-import type { CustomDate, PeriodData, SettingsData } from "../model/types";
+import { CustomDate, type PeriodData, type SettingsData } from "../model/types";
 
 export function mean(array: number[]): number{
    return array.reduce((a, b) => a + b)/array.length;
@@ -33,16 +33,35 @@ export function nextPeriod(data: PeriodData[], settings: SettingsData):{earliest
   const latestPeriodStart = data[0].start;
   const parameters = {
     plusMinus: settings.plusMinus,
-    cycleLength: settings.cycleLength
+    averageCycleLength: settings.cycleLength
   }
 
   if (!settings.useDefaults && cycleLengths.length >= settings.threshold){
     parameters.plusMinus = Math.round(standardDeviation(cycleLengths) * 2);
-    parameters.cycleLength = Math.round(mean(cycleLengths));
+    parameters.averageCycleLength = Math.round(mean(cycleLengths));
   }
 
-  const median = latestPeriodStart.daysBeforeOrAfter(parameters.cycleLength);
+  const median = latestPeriodStart.daysBeforeOrAfter(parameters.averageCycleLength);
   const earliest = median.daysBeforeOrAfter(parameters.plusMinus * -1);
   const latest = median.daysBeforeOrAfter(parameters.plusMinus);
   return {earliest, latest};
+}
+
+export function cyclePhase(data: PeriodData[], settings: SettingsData):{daysElapsed: number, phase: string, ovulationDay: CustomDate}{
+    const today = CustomDate.todayAsUTC();
+    const cycleLengths = getCycleLengths(data);
+    const averageCycleLength = settings.useDefaults || cycleLengths.length < settings.threshold ? settings.cycleLength : Math.round(mean(cycleLengths));
+    const latestPeriodStart = data[0].start;
+    const daysElapsed = latestPeriodStart.differenceInDays(today);
+    const ovulationDay = today.daysBeforeOrAfter(Math.floor(averageCycleLength / 2));
+
+    let phase = "follicular";
+
+    if (ovulationDay === today){
+        phase = "ovulation";
+    } else if(ovulationDay > today){
+        phase = "luteal";
+    }
+
+    return {daysElapsed, phase, ovulationDay};
 }

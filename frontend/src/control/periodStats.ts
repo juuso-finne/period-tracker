@@ -1,10 +1,10 @@
 import { CustomDate, type PeriodData, type SettingsData } from "../model/types";
 
-export function mean(array: number[]): number{
+function mean(array: number[]): number{
    return array.reduce((a, b) => a + b)/array.length;
 }
 
-export function getCycleLengths(data: PeriodData[], min:number = 15, max: number = 45): number[]{
+function getCycleLengths(data: PeriodData[], min:number = 15, max: number = 45): number[]{
     const cycleLengths:number[] = [];
 
     for (let i = 0; i < data.length -1; i++){
@@ -18,7 +18,7 @@ export function getCycleLengths(data: PeriodData[], min:number = 15, max: number
     return cycleLengths.filter(i => i >= min && i <= max);
 }
 
-export function standardDeviation(array: number[]): number{
+function standardDeviation(array: number[]): number{
     if (array.length < 2){
         return 0;
     }
@@ -27,19 +27,24 @@ export function standardDeviation(array: number[]): number{
     return Math.sqrt(variance);
 }
 
+function getParameters(data: PeriodData[], settings: SettingsData):{plusMinus: number, averageCycleLength: number}{
+    const cycleLengths = getCycleLengths(data);
+    const parameters = {
+        plusMinus: settings.plusMinus,
+        averageCycleLength: settings.cycleLength
+  }
+
+    if (!settings.useDefaults && cycleLengths.length >= settings.threshold){
+        parameters.plusMinus = Math.round(standardDeviation(cycleLengths) * 2);
+        parameters.averageCycleLength = Math.round(mean(cycleLengths));
+  }
+
+  return parameters;
+}
+
 export function nextPeriod(data: PeriodData[], settings: SettingsData):{earliest: CustomDate, latest: CustomDate}{
-
-  const cycleLengths = getCycleLengths(data);
   const latestPeriodStart = data[0].start;
-  const parameters = {
-    plusMinus: settings.plusMinus,
-    averageCycleLength: settings.cycleLength
-  }
-
-  if (!settings.useDefaults && cycleLengths.length >= settings.threshold){
-    parameters.plusMinus = Math.round(standardDeviation(cycleLengths) * 2);
-    parameters.averageCycleLength = Math.round(mean(cycleLengths));
-  }
+  const parameters = getParameters(data,settings);
 
   const median = latestPeriodStart.daysBeforeOrAfter(parameters.averageCycleLength);
   const earliest = median.daysBeforeOrAfter(parameters.plusMinus * -1);
@@ -49,19 +54,24 @@ export function nextPeriod(data: PeriodData[], settings: SettingsData):{earliest
 
 export function cyclePhase(data: PeriodData[], settings: SettingsData):{daysElapsed: number, phase: string, ovulationDay: CustomDate}{
     const today = CustomDate.todayAsUTC();
-    const cycleLengths = getCycleLengths(data);
-    const averageCycleLength = settings.useDefaults || cycleLengths.length < settings.threshold ? settings.cycleLength : Math.round(mean(cycleLengths));
+    const {averageCycleLength} = getParameters(data, settings);
+
     const latestPeriodStart = data[0].start;
+    const nextPeriodStart = latestPeriodStart.daysBeforeOrAfter(averageCycleLength);
     const daysElapsed = latestPeriodStart.differenceInDays(today);
-    const ovulationDay = today.daysBeforeOrAfter(Math.floor(averageCycleLength / 2));
+
+    const currentOvulationDay = latestPeriodStart.daysBeforeOrAfter(Math.floor(averageCycleLength / 2));
+    const pastOvulation = today > currentOvulationDay;
+    const nextOvulationDay = nextPeriodStart.daysBeforeOrAfter(Math.floor(averageCycleLength / 2));
+
 
     let phase = "follicular";
 
-    if (ovulationDay === today){
+    if (currentOvulationDay === today){
         phase = "ovulation";
-    } else if(ovulationDay > today){
+    } else if(pastOvulation){
         phase = "luteal";
     }
 
-    return {daysElapsed, phase, ovulationDay};
+    return {daysElapsed, phase, ovulationDay: pastOvulation ? nextOvulationDay : currentOvulationDay};
 }

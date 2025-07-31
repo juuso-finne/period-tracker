@@ -129,8 +129,15 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
   const {daysElapsed, phase, ovulationDay} = stats.cyclePhase(data, settings);
   return(
     <div>
-      <p>It has been {daysElapsed} days since the start of your latest cycle. You are likely in the <span className="font-bold">{phase}</span> phase of your cycle. You are most likely to ovulate around {ovulationDay.toLocaleDateString()}.</p>
-      <p>Your next period will likely start between {earliest.toLocaleDateString()} and {latest.toLocaleDateString()}</p>
+      <p>It has been <span className="font-bold">{daysElapsed}</span> day{daysElapsed === 1 ? "" : "s"} since the start of your cycle.</p>
+      <p>You are likely in the <span className="font-bold">{phase}</span> phase of your cycle. </p>
+      <p>Next ovulation most likely happens around <span className="font-bold"> {ovulationDay.toLocaleDateString()}</span>.</p>
+      <p>
+        Your next period will likely start between
+        <span className="font-bold"> {earliest.toLocaleDateString()} </span>
+        and
+        <span className="font-bold"> {latest.toLocaleDateString()}</span>
+      </p>
     </div>
   )
 }

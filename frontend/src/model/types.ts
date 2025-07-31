@@ -22,7 +22,7 @@ export class CustomDate extends Date{
 
     differenceInDays(other: Date): number{
         const millisecondsInDay = 24 * 60 * 60 * 1000;
-        return Math.floor((this.getTime() - other.getTime()) / millisecondsInDay)
+        return Math.floor(Math.abs(this.getTime() - other.getTime()) / millisecondsInDay)
     }
 
     isoStringDateOnly(): string {

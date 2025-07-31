@@ -39,8 +39,8 @@ export class CustomDate extends Date{
     }
 
     daysBeforeOrAfter(offset: number) : CustomDate{
-        const date = this.getDate();
-        return CustomDate.UTCFromValues(this.getFullYear(), this.getMonth(), date + offset);
+        const date = this.getUTCDate();
+        return CustomDate.UTCFromValues(this.getUTCFullYear(), this.getUTCMonth(), date + offset);
     }
 }
 

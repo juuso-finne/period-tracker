@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getPeriodData } from "../../model/API/periodData"
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState, useRef } from "react";
 import { AuthError, CustomDate } from "../../model/types";
 import { usePutPeriodMutation } from "../../control/mutations/periodDataMutations";
@@ -18,12 +18,15 @@ export default function EditPeriodPage() {
     const notesRef = useRef<HTMLTextAreaElement>(null)
 
     const params = useParams();
+    const [searchParams] = useSearchParams();
 
     const [selectionStart, setSelectionStart] = useState<CustomDate|null>(null);
     const [selectionEnd, setSelectionEnd] = useState<CustomDate|null>(null);
     const [currentPeriod, setCurrentPeriod] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>("");
     const [validSubmission, setValidSubmission] = useState<boolean>(false);
+    const [endPeriod] = useState<boolean>(searchParams.get("endPeriod") === "true");
+    const [fixedStart, setFixedStart] = useState<CustomDate | null>(null);
 
     const memoizedFixedEnd = useMemo(
     () => (currentPeriod ? CustomDate.todayAsUTC() : null),
@@ -58,18 +61,28 @@ export default function EditPeriodPage() {
             return;
         }
 
+        if(endPeriod){
+            setFixedStart(period.start)
+        }
+
         setSelectionEnd(period.end);
         setSelectionStart(period.start);
-        setCurrentPeriod(period.end === null);
+        setCurrentPeriod(period.end === null && !endPeriod);
         if (notesRef.current) {
             notesRef.current.value = period.notes;
         }
 
-    },[data, params, navigate])
+    },[data, params, navigate, endPeriod])
 
     useEffect(() =>{
         if (!selectionStart || (!selectionEnd && !currentPeriod)){
-            setErrorText("Please select a start date and an end date.");
+            if(endPeriod){
+                setErrorText("Please select when your period ended.")
+            } else if(currentPeriod){
+                setErrorText("Please select when your period started")
+            } else{
+                setErrorText("Please select a start date and an end date.");
+            }
             setValidSubmission(false);
             return;
         }
@@ -77,7 +90,7 @@ export default function EditPeriodPage() {
         const {message, isValid} = validate({id:Number(params.id), start:selectionStart, end:selectionEnd, notes:""}, data || []);
         setErrorText(message);
         setValidSubmission(isValid);
-    }, [selectionStart, selectionEnd, currentPeriod, data, params]);
+    }, [selectionStart, selectionEnd, currentPeriod, data, params, endPeriod]);
 
     const editSuccess = () => {
         navigate("/");
@@ -106,7 +119,7 @@ export default function EditPeriodPage() {
         <div>Notes:</div>
         <textarea ref={notesRef}/>
         <div className="flex gap-2">
-            <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} defaultChecked={currentPeriod}/>
+            <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} checked={currentPeriod}/>
             <p>I'm currently on this period</p>
         </div>
 
@@ -120,6 +133,7 @@ export default function EditPeriodPage() {
         selectionEnd={selectionEnd}
         setSelectionEnd={setSelectionEnd}
         fixedEnd={memoizedFixedEnd}
+        fixedStart={fixedStart}
         />
 
         <div className="flex justify-center gap-5">

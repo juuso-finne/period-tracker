@@ -182,8 +182,6 @@ export default function Calendar(props: Props) {
         if (mode === "RANGE" && selectionStart && selectionEnd) {
             setPivot(selectionEnd);
             setHoverTarget(selectionStart);
-            setYear(selectionStart.getFullYear());
-            setMonth(selectionStart.getMonth());
             setOpenSelection(false);
         }
     }, [selectionStart, selectionEnd, mode]);

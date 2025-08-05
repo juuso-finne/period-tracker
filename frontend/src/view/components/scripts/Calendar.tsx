@@ -10,7 +10,9 @@ type Props = {
     value?: {day: CustomDate, period: number | null}|null,
     setValue?: React.Dispatch<React.SetStateAction<{day: CustomDate, period: number | null} | null>>
     fixedStart?: CustomDate | null,
-    fixedEnd?: CustomDate | null
+    fixedEnd?: CustomDate | null,
+    initialMonth?: number,
+    initialYear?: number
 }
 
 
@@ -18,10 +20,10 @@ import { useState, useMemo, useEffect, useRef} from "react";
 import * as calendarUtils from "../../../control/calendar"
 
 export default function Calendar(props: Props) {
-    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, fixedStart, fixedEnd} = props;
+    const {periodData, selectionEnd, selectionStart, setSelectionEnd, setSelectionStart, mode, setValue, fixedStart, fixedEnd, initialMonth, initialYear} = props;
 
-    const [month, setMonth] = useState<number>(selectionStart?.getMonth() || new Date().getMonth());
-    const [year, setYear] = useState<number>(selectionStart?.getFullYear() || new Date().getFullYear());
+    const [month, setMonth] = useState<number>(new Date().getMonth());
+    const [year, setYear] = useState<number>(new Date().getFullYear());
     const [hoverTarget, setHoverTarget] = useState<CustomDate| null>(selectionStart ? selectionEnd || null : null);
     const [pivot, setPivot] = useState<CustomDate | null>(() => calendarUtils.setInitialPivot(fixedStart || null, fixedEnd || null, selectionStart || null, selectionEnd || null));
     const [openSelection, setOpenSelection] = useState<boolean>((selectionStart !== null) != (selectionEnd !== null) || !!fixedStart || !!fixedEnd);
@@ -32,6 +34,15 @@ export default function Calendar(props: Props) {
         "July", "August", "September", "October", "November", "December"];
 
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+    useEffect(() => {
+        if (!initialMonth || !initialYear){
+            return;
+        }
+
+        setMonth(initialMonth);
+        setYear(initialYear);
+    }, [initialMonth, initialYear])
 
     const hoverHandler = (d: CustomDate) => {
         if (!openSelection){

@@ -14,7 +14,7 @@ export default function BaseDialog({isOpen, children, setIsOpen}:{isOpen: boolea
         <dialog
             ref={ref}
             onCancel={() => setIsOpen(false)}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 min-w-sm w-fit"
         >
             {children}
         </dialog>

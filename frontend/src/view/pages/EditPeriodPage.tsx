@@ -6,6 +6,7 @@ import { AuthError, CustomDate } from "../../model/types";
 import { usePutPeriodMutation } from "../../control/mutations/periodDataMutations";
 import validate from "../../control/validation";
 import Calendar from "../components/scripts/Calendar";
+import SuccessDialog from "../components/scripts/Dialog/SuccessDialog";
 
 export default function EditPeriodPage() {
     const navigate = useNavigate();
@@ -27,6 +28,9 @@ export default function EditPeriodPage() {
     const [validSubmission, setValidSubmission] = useState<boolean>(false);
     const [endPeriod] = useState<boolean>(searchParams.get("endPeriod") === "true");
     const [fixedStart, setFixedStart] = useState<CustomDate | null>(null);
+    const [successOpen, setSuccessOpen] = useState<boolean>(false);
+    const [initialYear, setInitialYear] = useState<number>(new Date().getFullYear());
+    const [initialMonth, setInitialMonth] = useState<number>(new Date().getMonth());
 
     const memoizedFixedEnd = useMemo(
     () => (currentPeriod ? CustomDate.todayAsUTC() : null),
@@ -68,6 +72,8 @@ export default function EditPeriodPage() {
         setSelectionEnd(period.end);
         setSelectionStart(period.start);
         setCurrentPeriod(period.end === null && !endPeriod);
+        setInitialMonth(period.start.getUTCMonth());
+        setInitialYear(period.start.getUTCFullYear());
         if (notesRef.current) {
             notesRef.current.value = period.notes;
         }
@@ -93,7 +99,7 @@ export default function EditPeriodPage() {
     }, [selectionStart, selectionEnd, currentPeriod, data, params, endPeriod]);
 
     const editSuccess = () => {
-        navigate("/");
+        setSuccessOpen(true);
     }
 
     const editFail = (error: Error) =>{
@@ -114,6 +120,11 @@ export default function EditPeriodPage() {
 
     return (
     <>
+        <SuccessDialog
+            isOpen={successOpen}
+            setIsOpen={setSuccessOpen}
+            message={"Changes saved"}
+        />
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>End date: {selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>Notes:</div>
@@ -134,6 +145,8 @@ export default function EditPeriodPage() {
         setSelectionEnd={setSelectionEnd}
         fixedEnd={memoizedFixedEnd}
         fixedStart={fixedStart}
+        initialMonth={initialMonth}
+        initialYear={initialYear}
         />
 
         <div className="flex justify-center gap-5">
@@ -148,7 +161,7 @@ export default function EditPeriodPage() {
             >
                 Save
             </button>
-            <button className="btn-primary" onClick={() => navigate("/")}>Cancel</button>
+            <button className="btn-primary" onClick={() => navigate("/")}>Back</button>
         </div>
     </>
     )

@@ -6,6 +6,7 @@ import { AuthError, CustomDate } from "../../model/types";
 import { usePostPeriodMutation } from "../../control/mutations/periodDataMutations";
 import validate from "../../control/validation";
 import Calendar from "../components/scripts/Calendar";
+import SuccessDialog from "../components/scripts/Dialog/SuccessDialog";
 
 export default function NewPeriodPage() {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function NewPeriodPage() {
     const [errorText, setErrorText] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
     const [validSubmission, setValidSubmission] = useState<boolean>(false);
+    const [successOpen, setSuccessOpen] = useState<boolean>(false);
 
     const memoizedFixedEnd = useMemo(
     () => (currentPeriod ? CustomDate.todayAsUTC() : null),
@@ -52,7 +54,7 @@ export default function NewPeriodPage() {
     }, [selectionStart, selectionEnd, currentPeriod, data]);
 
     const submissionSuccess = () => {
-        navigate("/");
+        setSuccessOpen(true);
     }
 
     const submissionFail = (error: Error) =>{
@@ -73,6 +75,11 @@ export default function NewPeriodPage() {
 
     return (
     <>
+        <SuccessDialog
+            message="Period data saved successfully"
+            isOpen={successOpen}
+            setIsOpen={setSuccessOpen}
+        />
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>End date: {selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>Notes:</div>
@@ -106,7 +113,7 @@ export default function NewPeriodPage() {
             >
                 Submit
             </button>
-            <button className="btn-primary" onClick={() => navigate(-1)}>Cancel</button>
+            <button className="btn-primary" onClick={() => navigate(-1)}>Back</button>
         </div>
     </>
     )

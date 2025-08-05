@@ -14,7 +14,10 @@ export default function SuccessDialog({isOpen, setIsOpen, message=""} : {isOpen:
                 <button className="btn-primary" onClick={() => {
                     setIsOpen(false)
                     window.location.reload();
-                    }}>OK
+                    }}>Stay on this page
+                </button>
+                <button className="btn-primary" onClick={() => window.location.href = "/"}>
+                    Back to main
                 </button>
             </div>
         </BaseDialog>

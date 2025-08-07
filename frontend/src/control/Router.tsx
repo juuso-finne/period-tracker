@@ -7,6 +7,7 @@ import NotFoundPage from "../view/pages/NotFoundPage"
 import NewPeriodPage from "../view/pages/NewPeriodPage"
 import EditPeriodPage from "../view/pages/EditPeriodPage"
 import SettingsPage from "../view/pages/SettingsPage"
+import ViewDataPage from "../view/pages/ViewDataPage"
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
   {
     path: "settings",
     element: <SettingsPage/>
+  },
+
+  {
+    path: "view",
+    element: <ViewDataPage/>
   }
 ])
 

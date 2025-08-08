@@ -161,7 +161,7 @@ export default function EditPeriodPage() {
             >
                 Save
             </button>
-            <button className="btn-primary" onClick={() => navigate("/")}>Back</button>
+            <button className="btn-primary" onClick={() => navigate(-1)}>Back</button>
         </div>
     </>
     )

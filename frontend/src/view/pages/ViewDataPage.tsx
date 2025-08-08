@@ -5,6 +5,7 @@ import { getPeriodData } from "../../model/API/periodData"
 import { useNavigate } from "react-router-dom";
 import type { CustomDate, PeriodData } from "../../model/types";
 import { AuthError } from "../../model/types";
+import DeletePeriodButton from "../components/scripts/DeletePeriodButton";
 
 function ViewDataPage() {
   const navigate = useNavigate();
@@ -54,10 +55,16 @@ function ViewDataPage() {
       {<p>{errorText}</p>}
 
     {activePeriod ?
-      <div className="border-2 my-4 p-2 w-fit">
-        <p>start: {activePeriod.start.isoStringDateOnly()}</p>
-        <p>end: {activePeriod.end?.isoStringDateOnly()}</p>
-        <p>notes: {activePeriod.notes}</p>
+      <div className="border-2 my-4 p-2 min-w-sm w-fit flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
+          <p>start: {activePeriod.start.isoStringDateOnly()}</p>
+          <p>end: {activePeriod.end?.isoStringDateOnly()}</p>
+          <p>notes: {activePeriod.notes}</p>
+        </div>
+        <div className="flex gap-2 justify-center">
+          <DeletePeriodButton id={activePeriod.id || 0} setErrorText={setErrorText}/>
+          <button className="btn-primary" onClick={() =>navigate(`/editPeriod/${activePeriod.id}`)}>Edit</button>
+        </div>
       </div>
       :
       <></>

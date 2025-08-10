@@ -16,3 +16,11 @@ export const register = async (info: LoginInfo): Promise<Response> => {
         throw new Error(error instanceof Error ? error.message : String(error))
     }
 }
+
+export const deleteUser = async (): Promise<Response> => {
+    try {
+        return apiRequest("DELETE", "/users/auth");
+    } catch (error) {
+        throw new Error(error instanceof Error ? error.message : String(error))
+    }
+}

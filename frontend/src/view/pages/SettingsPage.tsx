@@ -4,6 +4,7 @@ import { getSettingsData } from "../../model/API/settingsData"
 import { usePutSettingsMutation } from "../../control/mutations/settingsMutations";
 import { useNavigate } from "react-router-dom";
 import { AuthError, type SettingsData } from "../../model/types";
+import DeleteUserButton from "../components/scripts/DeleteUserButton";
 
 export default function SettingsPage() {
     const navigate = useNavigate();
@@ -78,13 +79,19 @@ export default function SettingsPage() {
     <>
         <h1>Settings</h1>
         <p>{errorText}</p>
-        <SettingsForm settings={newSettings || emptySettings} setSettings={setNewSettings} onError={onError} onSuccess={onSuccess} isValid={isValid}/>
+        <SettingsForm
+            settings={newSettings || emptySettings}
+            setSettings={setNewSettings}
+            onError={onError}
+            onSuccess={onSuccess}
+            isValid={isValid}
+            setErrorText={setErrorText}/>
     </>
     )
 
 }
 
-function SettingsForm({settings, setSettings, onSuccess, onError, isValid}: {settings: SettingsData, setSettings: React.Dispatch<React.SetStateAction<SettingsData>>, onSuccess: () => void, onError: (error: Error) => void, isValid:boolean}) {
+function SettingsForm({settings, setSettings, onSuccess, onError, isValid, setErrorText}: {settings: SettingsData, setSettings: React.Dispatch<React.SetStateAction<SettingsData>>, onSuccess: () => void, onError: (error: Error) => void, isValid:boolean, setErrorText: React.Dispatch<React.SetStateAction<string>>}) {
     const navigate = useNavigate();
     const mutation = usePutSettingsMutation(onSuccess, onError);
     const defaultSettings = {
@@ -116,6 +123,10 @@ function SettingsForm({settings, setSettings, onSuccess, onError, isValid}: {set
             <button className="btn-primary" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
             <button className="btn-primary" onClick={e => {e.preventDefault(); setSettings(defaultSettings)}}>Restore defaults</button>
             <button className="btn-primary" onClick={e => {e.preventDefault(); navigate("/")}}>Cancel</button>
+        </div>
+
+        <div>
+            <DeleteUserButton setErrorText={setErrorText}/>
         </div>
     </form>)
 }

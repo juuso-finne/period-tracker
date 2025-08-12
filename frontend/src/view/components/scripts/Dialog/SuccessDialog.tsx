@@ -1,7 +1,7 @@
 import BaseDialog from "./BaseDialog"
 //import { useNavigate } from "react-router-dom";
 
-export default function SuccessDialog({isOpen, setIsOpen, message="", stayOnPageOption=true} : {isOpen:boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, message: string, stayOnPageOption?: boolean}) {
+export default function SuccessDialog({isOpen, setIsOpen, message="", stayOnPageOption=true, acknowledgeMessage="Back to main"} : {isOpen:boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, message: string, stayOnPageOption?: boolean, acknowledgeMessage?: string}) {
     const defaultMessage = "Operation completed successfully";
     //const navigate = useNavigate();
     return (
@@ -21,8 +21,14 @@ export default function SuccessDialog({isOpen, setIsOpen, message="", stayOnPage
                     </button>
                 }
 
-                <button className="btn-primary" onClick={() => window.location.href = "/"}>
-                    Back to main
+                <button
+                    className="btn-primary"
+                    onClick={() => {
+                        setIsOpen(false)
+                        window.location.href = "/";
+                    }}
+                >
+                    {acknowledgeMessage}
                 </button>
             </div>
         </BaseDialog>

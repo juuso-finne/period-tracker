@@ -131,12 +131,12 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
     <div>
       <p>It has been <span className="font-bold">{daysElapsed}</span> day{daysElapsed === 1 ? "" : "s"} since the start of your cycle.</p>
       <p>You are likely in the <span className="font-bold">{phase}</span> phase of your cycle. </p>
-      <p>Next ovulation most likely happens around <span className="font-bold"> {ovulationDay.toLocaleDateString()}</span>.</p>
+      <p>Next ovulation most likely happens around <span className="font-bold"> {ovulationDay.toLocaleDateString(undefined, {timeZone:"UTC"})}</span>.</p>
       <p>
         Your next period will likely start between
-        <span className="font-bold"> {earliest.toLocaleDateString()} </span>
+        <span className="font-bold"> {earliest.toLocaleDateString(undefined, {timeZone:"UTC"})} </span>
         and
-        <span className="font-bold"> {latest.toLocaleDateString()}</span>
+        <span className="font-bold"> {latest.toLocaleDateString(undefined, {timeZone:"UTC"})}</span>
       </p>
     </div>
   )

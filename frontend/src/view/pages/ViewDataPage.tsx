@@ -57,8 +57,8 @@ function ViewDataPage() {
     {activePeriod ?
       <div className="border-2 my-4 p-2 min-w-sm w-fit flex flex-col gap-2">
         <div className="flex flex-col gap-1">
-          <p>start: {activePeriod.start.isoStringDateOnly()}</p>
-          <p>end: {activePeriod.end?.isoStringDateOnly()}</p>
+          <p>start: {activePeriod.start.toLocaleDateString(undefined, {timeZone:"UTC"})}</p>
+          <p>end: {activePeriod.end?.toLocaleDateString(undefined, {timeZone:"UTC"})}</p>
           <p>notes: {activePeriod.notes}</p>
         </div>
         <div className="flex gap-2 justify-center">

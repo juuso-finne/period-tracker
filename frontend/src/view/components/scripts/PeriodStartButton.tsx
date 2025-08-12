@@ -13,6 +13,7 @@ export default function PeriodStartButton({currentPeriod, setErrorText}:{current
     const navigate = useNavigate();
 
     const submissionSuccess = () => {
+        setIsOpen(false);
         setSuccessOpen(true);
     }
 

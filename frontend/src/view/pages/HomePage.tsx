@@ -5,10 +5,14 @@ import { getPeriodData } from "../../model/API/periodData"
 import { getSettingsData } from "../../model/API/settingsData";
 import { getCookie } from "../../control/cookies";
 import { AuthError, type PeriodData, type SettingsData } from "../../model/types";
+import PeriodStartButton from "../components/scripts/PeriodStartButton";
+import PeriodEndButton from "../components/scripts/PeriodEndButton";
 import * as stats from "../../control/periodStats"
 
 function HomePage() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  const [currentPeriod, setCurrentPeriod] = useState(false);
 
   const results = useQueries({
     queries: [
@@ -33,10 +37,25 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (error && error instanceof AuthError){
-      setLoggedIn(false);
+    if (!error){
+      setErrorText("");
+      return;
     }
+
+    if (error instanceof AuthError){
+      setLoggedIn(false);
+      return;
+    }
+
+    setErrorText(error.message);
   }, [error]);
+
+  useEffect(() => {
+    if(!results[0].data || results[0].data?.length === 0){
+      return;
+    }
+    setCurrentPeriod(results[0].data[0].end === null);
+  },[results])
 
   if (!loggedIn){
     return(<div>
@@ -53,8 +72,11 @@ function HomePage() {
   return (
     <div className="flex flex-col gap-4 items-center text-center">
       <h1 className="text-red-400 text-2xl">Period tracker</h1>
-      <div>Welcome, {getCookie("username")}!</div>
+      <p>Welcome, {getCookie("username")}!</p>
+      <p>{errorText}</p>
       <Prediction data={data} settings={settings}/>
+      <p>{`You are currently ${!currentPeriod ? "not" : ""} on your period`}</p>
+      <MenuButtons currentPeriod={currentPeriod} setErrorText={setErrorText} latestPeriod={data[0]}/>
     </div>
   )
 }
@@ -83,6 +105,13 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
       </p>
     </div>
   )
+}
+
+function MenuButtons ({latestPeriod, currentPeriod, setErrorText}:{latestPeriod: PeriodData, currentPeriod:boolean, setErrorText: React.Dispatch<React.SetStateAction<string>>}){
+  return(<div className="flex flex-col gap-2">
+      <PeriodStartButton currentPeriod={currentPeriod} setErrorText={setErrorText}/>
+      <PeriodEndButton currentPeriod={currentPeriod} setErrorText={setErrorText} data={latestPeriod}/>
+  </div>)
 }
 
 export default HomePage

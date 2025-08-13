@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { skipToken, useQueries } from "@tanstack/react-query"
 import { getPeriodData } from "../../model/API/periodData"
 import { getSettingsData } from "../../model/API/settingsData";
@@ -70,10 +70,10 @@ function HomePage() {
 
 
   return (
-    <div className="flex flex-col gap-4 items-center text-center">
+    <div className="flex flex-col gap-6 items-center text-center">
       <h1 className="text-red-400 text-2xl">Period tracker</h1>
       <p>Welcome, {getCookie("username")}!</p>
-      <p>{errorText}</p>
+      {errorText !== "" ? <p>{errorText}</p> : <></>}
       <Prediction data={data} settings={settings}/>
       <div className="flex flex-col gap-2 items-center">
         <p>{`You are currently marked as ${!currentPeriod ? "not" : ""} on your period`}</p>
@@ -115,8 +115,12 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
 }
 
 function MenuButtons (){
+  const navigate = useNavigate();
   return(
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 items-center">
+      <button className="btn-primary" onClick={() => navigate("/view")}>View/edit period data</button>
+      <button className="btn-primary" onClick={() => navigate("/new")}>Insert period data</button>
+      <button className="btn-primary" onClick={() => navigate("/settings")}>Settings</button>
     </div>
   )
 }

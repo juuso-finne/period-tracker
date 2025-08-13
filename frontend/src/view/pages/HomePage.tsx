@@ -75,8 +75,15 @@ function HomePage() {
       <p>Welcome, {getCookie("username")}!</p>
       <p>{errorText}</p>
       <Prediction data={data} settings={settings}/>
-      <p>{`You are currently ${!currentPeriod ? "not" : ""} on your period`}</p>
-      <MenuButtons currentPeriod={currentPeriod} setErrorText={setErrorText} latestPeriod={data[0]}/>
+      <div className="flex flex-col gap-2 items-center">
+        <p>{`You are currently marked as ${!currentPeriod ? "not" : ""} on your period`}</p>
+        { currentPeriod ?
+          <PeriodEndButton setErrorText={setErrorText} data={data}/>
+          :
+          <PeriodStartButton data={data} setErrorText={setErrorText}/>
+        }
+      </div>
+      <MenuButtons setErrorText={setErrorText} data={data}/>
     </div>
   )
 }
@@ -107,11 +114,11 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
   )
 }
 
-function MenuButtons ({latestPeriod, currentPeriod, setErrorText}:{latestPeriod: PeriodData, currentPeriod:boolean, setErrorText: React.Dispatch<React.SetStateAction<string>>}){
-  return(<div className="flex flex-col gap-2">
-      <PeriodStartButton currentPeriod={currentPeriod} setErrorText={setErrorText}/>
-      <PeriodEndButton currentPeriod={currentPeriod} setErrorText={setErrorText} data={latestPeriod}/>
-  </div>)
+function MenuButtons ({data, setErrorText}:{data: PeriodData[], setErrorText: React.Dispatch<React.SetStateAction<string>>}){
+  return(
+    <div className="flex flex-col gap-2">
+    </div>
+  )
 }
 
 export default HomePage

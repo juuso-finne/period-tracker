@@ -26,9 +26,7 @@ export default function PeriodStartButton({data, setErrorText}:{data: PeriodData
     }
 
     const mutation = usePostPeriodMutation(submissionSuccess, submissionFail);
-    if (data.length !== 0 && data[0].end === null){
-        return(<></>)
-    }
+
     return (
     <>
         <button className="btn-primary" onClick={() => setIsOpen(true)}>

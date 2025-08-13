@@ -9,6 +9,7 @@ export default function PeriodStartButton({data, setErrorText}:{data: PeriodData
 
     const [isOpen, setIsOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState<boolean>(false);
+    const [dialogError, setDialogError] = useState("");
 
     const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ export default function PeriodStartButton({data, setErrorText}:{data: PeriodData
     }
 
     const submissionFail = (error: Error) =>{
+        setIsOpen(false);
         if (error instanceof AuthError){
             navigate("/redirect");
         }else{
@@ -37,22 +39,34 @@ export default function PeriodStartButton({data, setErrorText}:{data: PeriodData
             isOpen={isOpen}
             setIsOpen={setIsOpen}
         >
-            <div className="flex gap-2 p-4">
-                <button
-                    className="btn-primary"
-                    onClick={() => mutation.mutate({id:null, start: CustomDate.todayAsUTC(), end: null, notes: ""})}
-                >
-                    My period started today
-                </button>
-                <button
-                    className="btn-primary"
-                    onClick={() => navigate("/new?current=true")}
-                >
-                    My period started earlier
-                </button>
-                <button className="btn-primary" onClick={() => setIsOpen(false)}>
-                    Cancel
-                </button>
+            <div className="flex flex-col gap-2 p-4">
+                <p className="text-center">{dialogError}</p>
+                <div className="flex gap-2 justify-center">
+
+                    <button
+                        className="btn-primary"
+                        onClick={() => {
+                            const today = CustomDate.todayAsUTC();
+                            const yesterday = today.daysBeforeOrAfter(-1);
+                            if (data.length !== 0 && (data[0].end?.valueOf() === today.valueOf() || data[0].end?.valueOf() === yesterday.valueOf())){
+                                setDialogError("There is a period ending today or yesterday. Please edit or remove the conflicting data")
+                                return;
+                            }
+                            mutation.mutate({id:null, start: CustomDate.todayAsUTC(), end: null, notes: ""});
+                        }}
+                    >
+                        My period started today
+                    </button>
+                    <button
+                        className="btn-primary"
+                        onClick={() => navigate("/new?current=true")}
+                    >
+                        My period started earlier
+                    </button>
+                    <button className="btn-primary" onClick={() => setIsOpen(false)}>
+                        Cancel
+                    </button>
+                </div>
             </div>
         </BaseDialog>
 

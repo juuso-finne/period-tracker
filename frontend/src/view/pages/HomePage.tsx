@@ -83,7 +83,7 @@ function HomePage() {
           <PeriodStartButton data={data} setErrorText={setErrorText}/>
         }
       </div>
-      <MenuButtons setErrorText={setErrorText} data={data}/>
+      <MenuButtons/>
     </div>
   )
 }
@@ -114,7 +114,7 @@ function Prediction({data, settings}: {data: PeriodData[], settings: SettingsDat
   )
 }
 
-function MenuButtons ({data, setErrorText}:{data: PeriodData[], setErrorText: React.Dispatch<React.SetStateAction<string>>}){
+function MenuButtons (){
   return(
     <div className="flex flex-col gap-2">
     </div>

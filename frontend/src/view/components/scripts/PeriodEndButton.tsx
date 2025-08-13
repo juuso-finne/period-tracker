@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { usePutPeriodMutation } from "../../../control/mutations/periodDataMutations";
 import { AuthError, CustomDate, type PeriodData } from "../../../model/types";
 
-export default function PeriodEndButton({data, currentPeriod, setErrorText}:{data: PeriodData, currentPeriod:boolean, setErrorText: React.Dispatch<React.SetStateAction<string>>}) {
+export default function PeriodEndButton({data, setErrorText}:{data: PeriodData[], setErrorText: React.Dispatch<React.SetStateAction<string>>}) {
 
     const [isOpen, setIsOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export default function PeriodEndButton({data, currentPeriod, setErrorText}:{dat
 
     const mutation = usePutPeriodMutation(submissionSuccess, submissionFail);
 
-    if (!currentPeriod){
+    if (data.length === 0 || data[0].end !== null){
         return(<></>)
     }
     return (
@@ -43,13 +43,13 @@ export default function PeriodEndButton({data, currentPeriod, setErrorText}:{dat
             <div className="flex gap-2 p-4">
                 <button
                     className="btn-primary"
-                    onClick={() => mutation.mutate({...data, end: CustomDate.todayAsUTC()})}
+                    onClick={() => mutation.mutate({...data[0], end: CustomDate.todayAsUTC()})}
                 >
                     My period ended today
                 </button>
                 <button
                     className="btn-primary"
-                    onClick={() => navigate(`/editPeriod/${data.id}/?endPeriod=true`)}
+                    onClick={() => navigate(`/editPeriod/${data[0].id}/?endPeriod=true`)}
                 >
                     My period ended earlier
                 </button>

@@ -3,9 +3,9 @@ import SuccessDialog from "./Dialog/SuccessDialog";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { usePostPeriodMutation } from "../../../control/mutations/periodDataMutations";
-import { AuthError, CustomDate } from "../../../model/types";
+import { AuthError, CustomDate, type PeriodData } from "../../../model/types";
 
-export default function PeriodStartButton({currentPeriod, setErrorText}:{currentPeriod:boolean, setErrorText: React.Dispatch<React.SetStateAction<string>>}) {
+export default function PeriodStartButton({data, setErrorText}:{data: PeriodData[], setErrorText: React.Dispatch<React.SetStateAction<string>>}) {
 
     const [isOpen, setIsOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState<boolean>(false);
@@ -26,8 +26,7 @@ export default function PeriodStartButton({currentPeriod, setErrorText}:{current
     }
 
     const mutation = usePostPeriodMutation(submissionSuccess, submissionFail);
-
-    if (currentPeriod){
+    if (data.length !== 0 && data[0].end === null){
         return(<></>)
     }
     return (

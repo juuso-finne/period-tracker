@@ -207,9 +207,7 @@ export default function Calendar(props: Props) {
     );
 
   return (
-    <div className="flex flex-col items-center mx-2 md:mx-0">
-        <div className=" w-full md:w-3/4 ">
-
+    <div className="flex flex-col items-center mx-2 md:mx-0 w-full max-w-5xl">
             <div className="flex justify-center">
                 <select className="border" onChange={ e => setMonth(Number(e.target.value))} value={month}>
                     {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
@@ -217,15 +215,13 @@ export default function Calendar(props: Props) {
                 <input className="border p-1" type="number" min="1900" max={new Date().getFullYear() + 5} value={year} onChange={e => setYear(Number(e.target.value))}/>
             </div>
 
-            <div className='grid grid-cols-7 border'>
+            <div className='grid grid-cols-7 border w-full'>
                 {weekDays.map((day, i) => <div className="text-center" key={i}>{day}</div>)}
             </div>
 
-            <div className='grid grid-cols-7'>
+            <div className='grid grid-cols-7 w-full'>
                 {propArray.map((dayProps, i) => <CalendarDay {...dayProps} hoverHandler={hoverHandler} clickHandler={clickHandler} key={i}/>)}
             </div>
-
-        </div>
     </div>
   )
 }

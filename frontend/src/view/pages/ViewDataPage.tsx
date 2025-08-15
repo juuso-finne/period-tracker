@@ -51,32 +51,33 @@ function ViewDataPage() {
 
 
   return (
-    <>
+    <div className="flex flex-col gap-2 items-center w-full">
       {<p>{errorText}</p>}
 
-    {activePeriod ?
-      <div className="border-2 my-4 p-2 min-w-sm w-fit flex flex-col gap-2">
-        <div className="flex flex-col gap-1">
-          <p>start: {activePeriod.start.toLocaleDateString(undefined, {timeZone:"UTC"})}</p>
-          <p>end: {activePeriod.end?.toLocaleDateString(undefined, {timeZone:"UTC"})}</p>
-          <p>notes: {activePeriod.notes}</p>
+      {activePeriod ?
+        <div className="border-2 my-4 p-2 min-w-xs w-fit flex flex-col gap-2">
+          <div className="flex flex-col gap-1 items-center">
+            <p>start: {activePeriod.start.toLocaleDateString(undefined, {timeZone:"UTC"})}</p>
+            <p>end: {activePeriod.end?.toLocaleDateString(undefined, {timeZone:"UTC"})}</p>
+            <p>notes: {activePeriod.notes}</p>
+          </div>
+          <div className="flex gap-2 justify-center items-center flex-col sm:flex-row">
+            <DeletePeriodButton id={activePeriod.id || 0} setErrorText={setErrorText}/>
+            <button className="btn-primary" onClick={() =>navigate(`/editPeriod/${activePeriod.id}`)}>Edit</button>
+          </div>
         </div>
-        <div className="flex gap-2 justify-center">
-          <DeletePeriodButton id={activePeriod.id || 0} setErrorText={setErrorText}/>
-          <button className="btn-primary" onClick={() =>navigate(`/editPeriod/${activePeriod.id}`)}>Edit</button>
-        </div>
-      </div>
-      :
-      <></>
-}
+        :
+        <></>
+      }
 
-      <Calendar
-        mode="SINGLE"
-        periodData={data || []}
-        setValue={setSingleselection}
-        value={singleSelection}
-        />
-    </>
+
+        <Calendar
+          mode="SINGLE"
+          periodData={data || []}
+          setValue={setSingleselection}
+          value={singleSelection}
+          />
+    </div>
   )
 }
 

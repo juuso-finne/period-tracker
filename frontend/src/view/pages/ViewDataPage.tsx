@@ -71,12 +71,15 @@ function ViewDataPage() {
       }
 
 
-        <Calendar
-          mode="SINGLE"
-          periodData={data || []}
-          setValue={setSingleselection}
-          value={singleSelection}
-          />
+      <Calendar
+        mode="SINGLE"
+        periodData={data || []}
+        setValue={setSingleselection}
+        value={singleSelection}
+        />
+
+      <button className="btn-primary" onClick={() => navigate(-1)}>Back to main</button>
+
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 @import "./view/components/styles/buttons.css";
 @import "./view/components/styles/calendar.css";
+@import "./view/components/styles/listItems.css";
 
 button{
     @apply px-4 py-2 rounded-lg shadow-md hover:shadow-gray-500 shadow-black w-fit min-w-32;

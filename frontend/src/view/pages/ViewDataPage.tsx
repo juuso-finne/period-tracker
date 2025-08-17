@@ -7,6 +7,8 @@ import type { CustomDate, PeriodData } from "../../model/types";
 import { AuthError } from "../../model/types";
 import DeletePeriodButton from "../components/scripts/DeletePeriodButton";
 
+type ViewMode = "LIST" | "CALENDAR";
+
 function ViewDataPage() {
   const navigate = useNavigate();
 
@@ -18,6 +20,7 @@ function ViewDataPage() {
   const [singleSelection, setSingleselection ] = useState<{day: CustomDate, period: number | null}|null>(null);
   const [activePeriod, setActivePeriod] = useState<PeriodData | null>(null);
   const [errorText, setErrorText] = useState<string>("");
+  const [viewMode, setViewMode] = useState<ViewMode>("CALENDAR");
 
   useEffect(()=>{
     if(isFetching || !data || !singleSelection?.period){
@@ -51,7 +54,7 @@ function ViewDataPage() {
 
 
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-2 items-center">
       {<p>{errorText}</p>}
 
       {activePeriod ?
@@ -70,17 +73,56 @@ function ViewDataPage() {
         <></>
       }
 
+      <div className="flex gap-2">
+        <p>View mode:</p>
 
-      <Calendar
+        <div>
+          <label htmlFor="calendar" className="mr-1">Calendar</label>
+          <input type="radio" checked={viewMode==="CALENDAR"} id="calendar" value={"CALENDAR"} name="selectViewMode" onChange={(e) => setViewMode(e.target.value as ViewMode)}/>
+        </div>
+
+        <div>
+          <label htmlFor="list" className="mr-1">List</label>
+          <input type="radio" checked={viewMode==="LIST"} id="list" value={"LIST"} name="selectViewMode" onChange={(e) => setViewMode(e.target.value as ViewMode)}/>
+        </div>
+      </div>
+
+
+      { viewMode === "CALENDAR" ?
+        <Calendar
         mode="SINGLE"
         periodData={data || []}
         setValue={setSingleselection}
         value={singleSelection}
         />
+      :
+        <List data={data||[]}/>
+      }
 
       <button className="btn-primary" onClick={() => navigate(-1)}>Back to main</button>
 
     </div>
+  )
+}
+
+function List({data}:{data: PeriodData[]}){
+  return(
+    <div className="grid grid-cols-[max-content_1fr] p-2 max-w-5xl w-full">
+        {data.map(item => (<ListItem data={item} key={item.id}/>))}
+    </div>
+  )
+}
+
+function ListItem({data}:{data: PeriodData}){
+  return(
+      <div className="contents group">
+          <div className="period-item">
+            {data.start.toLocaleDateString()} - {data.end?.toLocaleDateString()}
+          </div>
+          <div className="pl-4 min-w-0 truncate period-item">
+            {data.notes}
+          </div>
+      </div>
   )
 }
 

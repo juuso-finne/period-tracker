@@ -1,0 +1,5 @@
+@layer components{
+    .period-item{
+        @apply group-hover:bg-blue-500 group-hover:text-white group-odd:bg-gray-200 cursor-default;
+    }
+}

@@ -112,6 +112,8 @@ func (h *DataHandler) logout (w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *DataHandler) deleteUser (w http.ResponseWriter, r *http.Request){

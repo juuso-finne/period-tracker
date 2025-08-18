@@ -119,7 +119,7 @@ export default function EditPeriodPage() {
 
 
     return (
-    <>
+    <div className="flex flex-col items-center gap-2">
         <SuccessDialog
             isOpen={successOpen}
             setIsOpen={setSuccessOpen}
@@ -128,7 +128,7 @@ export default function EditPeriodPage() {
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>End date: {selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>Notes:</div>
-        <textarea ref={notesRef}/>
+        <textarea ref={notesRef} className="xl:min-w-xl"/>
         <div className="flex gap-2">
             <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} checked={currentPeriod}/>
             <p>I'm currently on this period</p>
@@ -163,6 +163,6 @@ export default function EditPeriodPage() {
             </button>
             <button className="btn-primary" onClick={() => navigate(-1)}>Back</button>
         </div>
-    </>
+    </div>
     )
 }

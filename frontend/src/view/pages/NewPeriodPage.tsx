@@ -74,16 +74,16 @@ export default function NewPeriodPage() {
 
 
     return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
         <SuccessDialog
             message="Period data saved successfully"
             isOpen={successOpen}
             setIsOpen={setSuccessOpen}
         />
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
-        <div>End date: {selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
+        <div>End date: {currentPeriod ? "-" : `${selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}`}</div>
         <div>Notes:</div>
-        <textarea onChange={e => setNotes(e.target.value)}/>
+        <textarea className="xl:min-w-xl" onChange={e => setNotes(e.target.value)}/>
         <div className="flex gap-2">
             <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} defaultChecked={currentPeriod}/>
             <p>I'm currently on this period</p>

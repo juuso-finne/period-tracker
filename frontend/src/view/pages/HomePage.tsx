@@ -72,7 +72,8 @@ function HomePage() {
   },[results])
 
   if (!loggedIn){
-    return(<div>
+    return(<div className="flex flex-col gap-6 items-center text-center">
+      <h1 className="text-red-400 text-2xl">Period tracker</h1>
       <p>Please <Link to={"login"}>log in or register</Link></p>
     </div>)
   }

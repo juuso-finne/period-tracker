@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import Calendar from "../components/scripts/Calendar";
 import { getPeriodData } from "../../model/API/periodData"
 import { useNavigate } from "react-router-dom";
-import type { CustomDate, PeriodData } from "../../model/types";
+import { CustomDate, type PeriodData } from "../../model/types";
 import { AuthError } from "../../model/types";
 import DeletePeriodButton from "../components/scripts/DeletePeriodButton";
 
@@ -96,7 +96,7 @@ function ViewDataPage() {
         value={singleSelection}
         />
       :
-        <List data={data||[]}/>
+        <List data={data||[]} setSingleSelection={setSingleselection}/>
       }
 
       <button className="btn-primary" onClick={() => navigate(-1)}>Back to main</button>
@@ -105,17 +105,17 @@ function ViewDataPage() {
   )
 }
 
-function List({data}:{data: PeriodData[]}){
+function List({data, setSingleSelection}:{data: PeriodData[], setSingleSelection:React.Dispatch<React.SetStateAction<{day: CustomDate, period: number | null}|null>>}){
   return(
     <div className="grid grid-cols-[max-content_1fr] p-2 max-w-5xl w-full">
-        {data.map(item => (<ListItem data={item} key={item.id}/>))}
+        {data.map(item => (<ListItem data={item} key={item.id} setSingleSelection={setSingleSelection}/>))}
     </div>
   )
 }
 
-function ListItem({data}:{data: PeriodData}){
+function ListItem({data, setSingleSelection}:{data: PeriodData, setSingleSelection:React.Dispatch<React.SetStateAction<{day: CustomDate, period: number | null}|null>>}){
   return(
-      <div className="contents group">
+      <div className="contents group" onClick={() => setSingleSelection({day: CustomDate.todayAsUTC(), period: data.id})}>
           <div className="period-item">
             {data.start.toLocaleDateString()} - {data.end?.toLocaleDateString()}
           </div>

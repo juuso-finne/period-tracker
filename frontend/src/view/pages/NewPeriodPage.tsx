@@ -74,7 +74,7 @@ export default function NewPeriodPage() {
 
 
     return (
-    <>
+    <div className="flex flex-col items-center">
         <SuccessDialog
             message="Period data saved successfully"
             isOpen={successOpen}
@@ -115,6 +115,6 @@ export default function NewPeriodPage() {
             </button>
             <button className="btn-primary" onClick={() => navigate(-1)}>Back</button>
         </div>
-    </>
+    </div>
     )
 }

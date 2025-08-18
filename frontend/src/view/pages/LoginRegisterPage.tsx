@@ -31,8 +31,8 @@ export default function LoginRegisterPage() {
     }
 
     return (
-        <>
-            <h2 className="font-bold">{existingUser ? "Log in" : "Register"}</h2>
+        <div className="flex flex-col items-center gap-2">
+            <h2>{existingUser ? "Log in" : "Register"}</h2>
             <LoginRegisterForm
                 submitHandler={existingUser ? loginFunction : registerFunction}
                 prompt = {existingUser ? "Log in" : "Register"}
@@ -43,6 +43,6 @@ export default function LoginRegisterPage() {
                 "Don't have an account? Click here to register"
                 : "Already have an account? Click here to log in"
             }</p>
-        </>
+        </div>
     )
 }

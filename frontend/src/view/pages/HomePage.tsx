@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { skipToken, useQueries } from "@tanstack/react-query"
 import { getPeriodData } from "../../model/API/periodData"
 import { getSettingsData } from "../../model/API/settingsData";
-import { getCookie } from "../../control/cookies";
+import { getCookie, deleteCookie } from "../../control/cookies";
 import { AuthError, type PeriodData, type SettingsData } from "../../model/types";
+import { useLogoutMutation } from "../../control/mutations/userMutations";
 import PeriodStartButton from "../components/scripts/PeriodStartButton";
 import PeriodEndButton from "../components/scripts/PeriodEndButton";
 import * as stats from "../../control/periodStats"
@@ -26,6 +27,19 @@ function HomePage() {
       }
     ]
   });
+
+  const logoutSuccess = () =>{
+    deleteCookie("session_token");
+    deleteCookie("csrf_token");
+    deleteCookie("username");
+    setLoggedIn(false);
+  }
+
+  const logoutFail = (error: Error) => {
+    setErrorText(error.message);
+  }
+
+  const logoutMutation = useLogoutMutation(logoutSuccess, logoutFail);
 
   const isFetching = results.some(query => query.isFetching);
   const error = results.find(query => query.error) ? results.find(query => query.error)?.error : null;
@@ -84,6 +98,7 @@ function HomePage() {
         }
       </div>
       <MenuButtons/>
+      <button className="btn-primary" onClick={() => logoutMutation.mutate()}>Log out</button>
     </div>
   )
 }

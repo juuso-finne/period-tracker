@@ -17,9 +17,9 @@ export const logout = async (): Promise<Response> => {
     }
 }
 
-export const register = async (): Promise<Response> => {
+export const register = async (info: LoginInfo): Promise<Response> => {
     try{
-        return apiRequest("POST", "/users/register")
+        return apiRequest("POST", "/users/register", JSON.stringify(info))
     } catch (error){
         throw new Error(error instanceof Error ? error.message : String(error))
     }

@@ -76,7 +76,7 @@ export default function SettingsPage() {
     }
 
     return (
-    <>
+    <div className="flex flex-col items-center gap-2">
         <h1>Settings</h1>
         <p>{errorText}</p>
         <SettingsForm
@@ -85,8 +85,9 @@ export default function SettingsPage() {
             onError={onError}
             onSuccess={onSuccess}
             isValid={isValid}
-            setErrorText={setErrorText}/>
-    </>
+            setErrorText={setErrorText}
+        />
+    </div>
     )
 
 }
@@ -101,32 +102,32 @@ function SettingsForm({settings, setSettings, onSuccess, onError, isValid, setEr
         useDefaults: false
     }
     return(
-    <form className="flex flex-col gap-2 w-xs">
-        <div className="flex justify-between">
-            <label htmlFor="length">Period length: </label>
-            <input id="length" type="number" value={settings.cycleLength} onChange={e => setSettings( (prev: SettingsData) => ({...prev, cycleLength: parseInt(e.target.value)}))}/>
-        </div>
-        <div className="flex justify-between">
-            <label htmlFor="plusMinus">+-: </label>
-            <input id="plusMinus" type="number" value={settings.plusMinus} onChange={e => setSettings( (prev: SettingsData) => ({...prev, plusMinus: parseInt(e.target.value)}))}/>
-        </div>
-        <div className={`flex ${settings.useDefaults ? "hidden" : ""} justify-between`}>
-            <label htmlFor="threashold">Threshold: </label>
-            <input id="threshold" type="number" value={settings.threshold} onChange={e => setSettings( (prev: SettingsData) => ({...prev, threshold: parseInt(e.target.value)}))}/>
-        </div>
-        <div className="flex justify-between">
-            <label htmlFor="useDefaults">Always use these settings </label>
-            <input id="useDefaults" type="checkbox" checked={settings.useDefaults} onChange={e => setSettings( (prev: SettingsData) => ({...prev, useDefaults: e.target.checked}))}/>
-        </div>
-
-        <div className="flex gap-2">
-            <button className="btn-primary" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
-            <button className="btn-primary" onClick={e => {e.preventDefault(); setSettings(defaultSettings)}}>Restore defaults</button>
-            <button className="btn-primary" onClick={e => {e.preventDefault(); navigate("/")}}>Cancel</button>
-        </div>
-
-        <div>
-            <DeleteUserButton setErrorText={setErrorText}/>
+    <form>
+        <div className="flex flex-col gap-2 w-xs">
+            <div className="flex justify-between">
+                <label htmlFor="length">Period length: </label>
+                <input id="length" type="number" value={settings.cycleLength} onChange={e => setSettings( (prev: SettingsData) => ({...prev, cycleLength: parseInt(e.target.value)}))}/>
+            </div>
+            <div className="flex justify-between">
+                <label htmlFor="plusMinus">+-: </label>
+                <input id="plusMinus" type="number" value={settings.plusMinus} onChange={e => setSettings( (prev: SettingsData) => ({...prev, plusMinus: parseInt(e.target.value)}))}/>
+            </div>
+            <div className={`flex ${settings.useDefaults ? "hidden" : ""} justify-between`}>
+                <label htmlFor="threashold">Threshold: </label>
+                <input id="threshold" type="number" value={settings.threshold} onChange={e => setSettings( (prev: SettingsData) => ({...prev, threshold: parseInt(e.target.value)}))}/>
+            </div>
+            <div className="flex justify-between">
+                <label htmlFor="useDefaults">Always use these settings </label>
+                <input id="useDefaults" type="checkbox" checked={settings.useDefaults} onChange={e => setSettings( (prev: SettingsData) => ({...prev, useDefaults: e.target.checked}))}/>
+            </div>
+            <div className="flex gap-2 justify-center">
+                <button className="btn-primary" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
+                <button className="btn-primary" onClick={e => {e.preventDefault(); setSettings(defaultSettings)}}>Restore defaults</button>
+                <button className="btn-primary" onClick={e => {e.preventDefault(); navigate("/")}}>Cancel</button>
+            </div>
+            <div className="self-center mt-6">
+                <DeleteUserButton setErrorText={setErrorText}/>
+            </div>
         </div>
     </form>)
 }

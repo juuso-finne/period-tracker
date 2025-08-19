@@ -78,7 +78,7 @@ export default function SettingsPage() {
     return (
     <div className="flex flex-col items-center gap-2">
         <h1>Settings</h1>
-        <p>{errorText}</p>
+        <p className="error-text">{errorText}</p>
         <SettingsForm
             settings={newSettings || emptySettings}
             setSettings={setNewSettings}

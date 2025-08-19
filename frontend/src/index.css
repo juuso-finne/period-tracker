@@ -15,3 +15,7 @@ button:disabled{
 a{
     @apply underline text-blue-600 cursor-pointer
 }
+
+.error-text{
+    @apply text-xl text-red-500
+}

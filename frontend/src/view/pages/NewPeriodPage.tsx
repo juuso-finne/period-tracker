@@ -89,7 +89,7 @@ export default function NewPeriodPage() {
             <p>I'm currently on this period</p>
         </div>
 
-        <div>{errorText}</div>
+        <div className="error-text">{errorText}</div>
 
         <Calendar
         mode = "RANGE"

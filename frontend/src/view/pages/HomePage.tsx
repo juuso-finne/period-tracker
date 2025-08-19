@@ -88,7 +88,7 @@ function HomePage() {
     <div className="flex flex-col gap-6 items-center text-center">
       <h1 className="text-red-400 text-2xl">Period tracker</h1>
       <p>Welcome, {getCookie("username")}!</p>
-      {errorText !== "" ? <p>{errorText}</p> : <></>}
+      {errorText !== "" ? <p className="error-text">{errorText}</p> : <></>}
       <Prediction data={data} settings={settings}/>
       <div className="flex flex-col gap-2 items-center">
         <p>{`You are currently marked as ${!currentPeriod ? "not" : ""} on your period`}</p>

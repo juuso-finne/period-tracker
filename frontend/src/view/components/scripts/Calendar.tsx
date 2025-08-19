@@ -209,10 +209,10 @@ export default function Calendar(props: Props) {
   return (
     <div className="flex flex-col items-center mx-2 md:mx-0 w-full max-w-5xl">
             <div className="flex justify-center">
-                <select className="border" onChange={ e => setMonth(Number(e.target.value))} value={month}>
+                <select className="data-entry" onChange={ e => setMonth(Number(e.target.value))} value={month}>
                     {months.map((month, i) => (<option value={i} key={month}>{month}</option>))}
                 </select>
-                <input className="border p-1" type="number" min="1900" max={new Date().getFullYear() + 5} value={year} onChange={e => setYear(Number(e.target.value))}/>
+                <input className="data-entry" type="number" min="1900" max={new Date().getFullYear() + 5} value={year} onChange={e => setYear(Number(e.target.value))}/>
             </div>
 
             <div className='grid grid-cols-7 border w-full'>

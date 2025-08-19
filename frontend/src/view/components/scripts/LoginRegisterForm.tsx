@@ -32,9 +32,9 @@ const LoginRegisterForm = (props: Props) => {
             <form>
                 <div className="flex gap-2 items-center">
                     <label htmlFor="usernameInput">Username:</label>
-                    <input ref={usernameRef} type="text" id="usernameInput"></input>
+                    <input className="data-entry" ref={usernameRef} type="text" id="usernameInput"></input>
                     <label htmlFor="passwordInput">Password:</label>
-                    <input ref={passwordRef} type="password" id="passwordInput"></input>
+                    <input className="data-entry" ref={passwordRef} type="password" id="passwordInput"></input>
                     <button className="btn-primary" onClick={handleSubmit}>{prompt}</button>
                 </div>
             </form>

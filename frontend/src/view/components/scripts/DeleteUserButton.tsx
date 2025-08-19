@@ -45,7 +45,7 @@ export default function DeleteUserButton({setErrorText}:{setErrorText: React.Dis
                 <div className="flex flex-col gap-2">
                     <p>Deleting your account will permanently remove all your period data. Please type your username to the text field to confirm this action:</p>
                     <div className="flex justify-center gap-2">
-                        <input type="text" onChange={e => setUsernameConfirmation(e.target.value)}/>
+                        <input type="text" className="data-entry" onChange={e => setUsernameConfirmation(e.target.value)}/>
                         <button
                             disabled={usernameConfirmation !== userName}
                             className="btn-danger"

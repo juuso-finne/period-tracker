@@ -83,7 +83,7 @@ export default function NewPeriodPage() {
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
         <div>End date: {currentPeriod ? "-" : `${selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}`}</div>
         <div>Notes:</div>
-        <textarea className="xl:min-w-xl" onChange={e => setNotes(e.target.value)}/>
+        <textarea className="xl:min-w-xl data-entry" onChange={e => setNotes(e.target.value)}/>
         <div className="flex gap-2">
             <input type="checkbox" onChange={e => setCurrentPeriod(e.target.checked)} defaultChecked={currentPeriod}/>
             <p>I'm currently on this period</p>

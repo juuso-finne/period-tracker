@@ -10,10 +10,14 @@ export default function BaseDialog({isOpen, children, setIsOpen}:{isOpen: boolea
             ref.current?.close();
         }
     }, [isOpen]);
+
     return (
         <dialog
             ref={ref}
-            onCancel={() => setIsOpen(false)}
+            onCancel={(e) => {
+                e.preventDefault();
+                setIsOpen(false);
+            }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 min-w-sm w-fit"
         >
             {children}

@@ -40,7 +40,7 @@ export default function PeriodStartButton({data, setErrorText}:{data: PeriodData
             setIsOpen={setIsOpen}
         >
             <div className="flex flex-col gap-2 p-4">
-                <p className="text-center">{dialogError}</p>
+                <p className="text-center error-text">{dialogError}</p>
                 <div className="flex gap-2 justify-center">
 
                     <button

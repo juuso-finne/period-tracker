@@ -19,7 +19,7 @@ func main(){
 	}
 
 
-	port, exists := os.LookupEnv("PORT")
+	port, exists := os.LookupEnv("VITE_BACKEND_PORT")
 	if !exists{
 		port = ":5000"
 	}

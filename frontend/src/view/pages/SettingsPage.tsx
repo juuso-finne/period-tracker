@@ -131,7 +131,7 @@ function SettingsForm({settings, setSettings, onSuccess, onError, isValid, setEr
                     <label htmlFor="useDefaults">Always use these settings </label>
                     <input className="data-entry" id="useDefaults" type="checkbox" checked={settings.useDefaults} onChange={e => setSettings( (prev: SettingsData) => ({...prev, useDefaults: e.target.checked}))}/>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 items-center sm:items-stretch">
+                <div className="flex flex-col sm:flex-row gap-2 items-center justify-center sm:items-stretch">
                     <button className="btn-save" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
                     <button className="btn-primary" onClick={e => {e.preventDefault(); setSettings(defaultSettings)}}>Restore defaults</button>
                     <button className="btn-primary" onClick={e => {e.preventDefault(); navigate("/")}}>Cancel</button>
@@ -161,7 +161,9 @@ function HelpText({showHelp}:{showHelp: boolean}){
                     </li>
 
                     <li>
-                        <span className="font-bold">Threshold:</span> This is the number of cycles required for making predictions based on actual data. If the number of cycles is lower, these values are used. If the checkbox below is selected, the predictions will always be based on these values instead of the data.
+                        <p><span className="font-bold">Threshold:</span> This is the number of cycles required for making predictions based on actual data. If the number of cycles is lower, these values are used. If the checkbox below is selected, the predictions will always be based on these values instead of the data.</p>
+
+                        <p className="mt-1">Note that a "cycle" is between two periods. For example, three periods (let's call them A, B, and C) form two cycles: One between A and B, and another between B and C</p>
                     </li>
                 </ul>
             </div>

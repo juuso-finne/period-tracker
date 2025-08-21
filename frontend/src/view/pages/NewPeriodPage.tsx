@@ -80,8 +80,9 @@ export default function NewPeriodPage() {
             isOpen={successOpen}
             setIsOpen={setSuccessOpen}
         />
+        <h2>Enter new period</h2>
         <div>Starting date: {selectionStart?.toLocaleDateString(undefined, {timeZone:"UTC"})}</div>
-        <div>End date: {currentPeriod ? "-" : `${selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"})}`}</div>
+        <div>End date: {currentPeriod ? "-" : `${selectionEnd ? selectionEnd?.toLocaleDateString(undefined, {timeZone:"UTC"}) : ""}`}</div>
         <div>Notes:</div>
         <textarea className="xl:min-w-xl data-entry" onChange={e => setNotes(e.target.value)}/>
         <div className="flex gap-2">

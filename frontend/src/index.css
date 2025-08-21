@@ -23,3 +23,7 @@ a{
 .data-entry{
     @apply border p-1 text-lg
 }
+
+h2{
+    @apply text-2xl font-bold
+}

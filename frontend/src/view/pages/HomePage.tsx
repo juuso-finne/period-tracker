@@ -73,7 +73,7 @@ function HomePage() {
 
   if (!loggedIn){
     return(<div className="flex flex-col gap-6 items-center text-center">
-      <h1 className="text-red-400 text-2xl">Period tracker</h1>
+      <h1 className="text-red-400 text-3xl font-bold">Period tracker</h1>
       <p>Please <Link to={"login"}>log in or register</Link></p>
     </div>)
   }
@@ -86,7 +86,7 @@ function HomePage() {
 
   return (
     <div className="flex flex-col gap-6 items-center text-center">
-      <h1 className="text-red-400 text-2xl">Period tracker</h1>
+      <h1 className="text-red-400 text-3xl font-bold">Period tracker</h1>
       <p>Welcome, {getCookie("username")}!</p>
       {errorText !== "" ? <p className="error-text">{errorText}</p> : <></>}
       <Prediction data={data} settings={settings}/>

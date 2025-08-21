@@ -55,6 +55,7 @@ function ViewDataPage() {
 
   return (
     <div className="flex flex-col gap-2 items-center">
+      <h2>View/Edit</h2>
       {<p className="error-text">{errorText}</p>}
 
       {activePeriod ?

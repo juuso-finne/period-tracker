@@ -232,10 +232,11 @@ function CalendarDay(
     { clickHandler: (_:CalendarDayProps) => void}
 ) {
     const {period, day, isSelected, hoverHandler, clickHandler} = props;
+    const isToday = day.valueOf() === CustomDate.todayAsUTC().valueOf();
 
     return(
         <div
-            className={`relative border hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected ? " selected" : ""}`}
+            className={`relative border ${isToday? "border-4" : ""} hover:bg-blue-500 hover:text-white min-h-7 md:min-h-12 p-[5%] ${isSelected ? " selected" : ""}`}
             onMouseEnter={() => hoverHandler(day)}
             onClick={() => clickHandler(props)}
         >

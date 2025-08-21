@@ -132,7 +132,7 @@ function SettingsForm({settings, setSettings, onSuccess, onError, isValid, setEr
                     <input className="data-entry" id="useDefaults" type="checkbox" checked={settings.useDefaults} onChange={e => setSettings( (prev: SettingsData) => ({...prev, useDefaults: e.target.checked}))}/>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 items-center sm:items-stretch">
-                    <button className="btn-primary" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
+                    <button className="btn-save" onClick={e => {e.preventDefault(); mutation.mutate(settings)}} disabled={!isValid}>Save changes</button>
                     <button className="btn-primary" onClick={e => {e.preventDefault(); setSettings(defaultSettings)}}>Restore defaults</button>
                     <button className="btn-primary" onClick={e => {e.preventDefault(); navigate("/")}}>Cancel</button>
                 </div>

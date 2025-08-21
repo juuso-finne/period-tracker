@@ -6,4 +6,8 @@
   .btn-danger{
     @apply bg-red-700 text-white
   }
+
+  .btn-save{
+    @apply bg-green-600 text-white
+  }
 }

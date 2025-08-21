@@ -151,7 +151,7 @@ export default function EditPeriodPage() {
 
         <div className="flex justify-center gap-5">
             <button
-                className="btn-primary"
+                className="btn-save"
                 disabled={!validSubmission}
                 onClick={() => {mutation.mutate({
                     id: Number(params.id),

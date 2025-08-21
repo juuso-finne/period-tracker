@@ -74,8 +74,8 @@ export default function PeriodStartButton({data, setErrorText}:{data: PeriodData
             message="Period data saved successfully"
             isOpen={successOpen}
             setIsOpen={setSuccessOpen}
-            stayOnPageOption={false}
-            acknowledgeMessage="OK"
+            backToMainOption={false}
+            stayMessage="OK"
         />
     </>
     )

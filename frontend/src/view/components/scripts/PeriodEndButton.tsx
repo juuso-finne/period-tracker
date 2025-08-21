@@ -10,6 +10,7 @@ export default function PeriodEndButton({data, setErrorText}:{data: PeriodData[]
     const [isOpen, setIsOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState<boolean>(false);
 
+
     const navigate = useNavigate();
 
     const submissionSuccess = () => {
@@ -60,8 +61,8 @@ export default function PeriodEndButton({data, setErrorText}:{data: PeriodData[]
             message="Period data saved successfully"
             isOpen={successOpen}
             setIsOpen={setSuccessOpen}
-            stayOnPageOption={false}
-            acknowledgeMessage="OK"
+            backToMainOption={false}
+            stayMessage="OK"
         />
     </>
     )

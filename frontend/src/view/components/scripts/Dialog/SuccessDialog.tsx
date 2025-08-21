@@ -1,9 +1,9 @@
 import BaseDialog from "./BaseDialog"
-//import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function SuccessDialog({isOpen, setIsOpen, message="", stayOnPageOption=true, acknowledgeMessage="Back to main"} : {isOpen:boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, message: string, stayOnPageOption?: boolean, acknowledgeMessage?: string}) {
+export default function SuccessDialog({isOpen, setIsOpen, message="", stayOnPageOption=true, returnMessage="Back to main", backToMainOption=true, stayMessage="Stay on this page"} : {isOpen:boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, message: string, stayOnPageOption?: boolean, returnMessage?: string, backToMainOption?:boolean, stayMessage?:string}) {
     const defaultMessage = "Operation completed successfully";
-    //const navigate = useNavigate();
+    const queryClient = useQueryClient();
     return (
         <BaseDialog
             isOpen={isOpen}
@@ -14,22 +14,27 @@ export default function SuccessDialog({isOpen, setIsOpen, message="", stayOnPage
                 {
                     stayOnPageOption &&
                     <button className="btn-primary" onClick={() => {
-                        setIsOpen(false)
-                        window.location.reload();
-                    }}>
-                        Stay on this page
+                            queryClient.invalidateQueries();
+                            setIsOpen(false)
+                        }
+                    }>
+                        {stayMessage}
                     </button>
                 }
 
-                <button
-                    className="btn-primary"
-                    onClick={() => {
-                        setIsOpen(false)
-                        window.location.href = "/";
-                    }}
-                >
-                    {acknowledgeMessage}
-                </button>
+                {
+                    backToMainOption &&
+                    <button
+                        className="btn-primary"
+                        onClick={() => {
+                            setIsOpen(false)
+                            window.location.href = "/";
+                        }
+                    }>
+                        {returnMessage}
+                    </button>
+                }
+
             </div>
         </BaseDialog>
     )

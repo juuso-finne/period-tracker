@@ -21,6 +21,7 @@ func CheckCORS(next http.Handler) http.Handler {
 	}
 
   originAllowlist = append(originAllowlist, fmt.Sprintf("%s:%s", frontend_url, frontend_port))
+  originAllowlist = append(originAllowlist, frontend_url)
 
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     origin := r.Header.Get("Origin")

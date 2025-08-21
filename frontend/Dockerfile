@@ -14,7 +14,7 @@ RUN npm install
 COPY .env .
 
 # Copy the source code
-COPY frontend/* ./
+COPY frontend/ ./
 
 # Build the React app for production
 RUN npm run build
@@ -26,7 +26,7 @@ FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # Copy the nginx.conf as default
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for the Nginx server
 EXPOSE 80

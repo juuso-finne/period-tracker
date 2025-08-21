@@ -29,7 +29,7 @@ type Method = "GET" | "POST" | "PUT" | "DELETE"
 function getBaseUrl(): string {
     const server = import.meta.env.VITE_SERVER
     const port = import.meta.env.VITE_BACKEND_PORT
-    const baseUrl = `${server}${port}`
+    const baseUrl = `${server}:${port}`
     return baseUrl
 }
 

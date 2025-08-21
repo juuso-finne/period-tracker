@@ -21,7 +21,7 @@ func main(){
 
 	port, exists := os.LookupEnv("VITE_BACKEND_PORT")
 	if !exists{
-		port = ":5000"
+		port = "5000"
 	}
 
 	db, err := connectToDB()
@@ -57,7 +57,7 @@ func main(){
 
 
 	fmt.Printf("API listening on port %s\n", port)
-	http.ListenAndServe(port, middleware.CheckCORS(mux))
+	http.ListenAndServe(fmt.Sprintf(":%s", port), middleware.CheckCORS(mux))
 
 
 }
